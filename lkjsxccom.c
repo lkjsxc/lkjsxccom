@@ -17,16 +17,24 @@
 #define FILE_PATH_MAX_LEN 512
 #define BASE_ROUTE_PATH "./routes"
 
-typedef enum {
-    OK,
-    ERR
-} Result;
+enum result {
+    RESULT_OK,
+    RESULT_ERR
+};
 
-typedef struct {
+struct http_request {
     char method[METHOD_MAX_LEN];
     char uri[URI_MAX_LEN];
     char version[VERSION_MAX_LEN];
-} HttpRequest;
+};
+
+struct server_socket {
+    int socket_fd;
+};
+
+struct client_connection {
+    int client_fd;
+};
 
 const char *http_status_message(int status_code) {
     switch (status_code) {
@@ -39,24 +47,22 @@ const char *http_status_message(int status_code) {
     }
 }
 
-Result send_all(int sockfd, const char *buffer, size_t length) {
+enum result send_all(int sockfd, const char *buffer, size_t length) {
     size_t total_sent = 0;
     while (total_sent < length) {
         ssize_t sent = send(sockfd, buffer + total_sent, length - total_sent, 0);
         if (sent < 0) {
-            perror("send");
-            return ERR;
+            return RESULT_ERR;
         }
         if (sent == 0) {
-             fprintf(stderr, "send: Connection closed unexpectedly\n");
-             return ERR;
+             return RESULT_ERR;
         }
         total_sent += (size_t)sent;
     }
-    return OK;
+    return RESULT_OK;
 }
 
-Result send_response_header(int client_fd, int status_code, const char *content_type, long content_length) {
+enum result send_response_header(int client_fd, int status_code, const char *content_type, long content_length) {
     char response_header[RESPONSE_BUFFER_SIZE];
     int header_len = snprintf(response_header, RESPONSE_BUFFER_SIZE,
                               "HTTP/1.1 %d %s\r\n"
@@ -68,14 +74,13 @@ Result send_response_header(int client_fd, int status_code, const char *content_
                               content_type, content_length);
 
     if (header_len < 0 || header_len >= RESPONSE_BUFFER_SIZE) {
-        fprintf(stderr, "send_response_header: Failed to format header or buffer too small\n");
-        return ERR;
+        return RESULT_ERR;
     }
 
     return send_all(client_fd, response_header, (size_t)header_len);
 }
 
-Result send_error_response(int client_fd, int status_code) {
+enum result send_error_response(int client_fd, int status_code) {
     char body[RESPONSE_BUFFER_SIZE];
     const char *status_msg = http_status_message(status_code);
     int body_len = snprintf(body, RESPONSE_BUFFER_SIZE,
@@ -83,27 +88,39 @@ Result send_error_response(int client_fd, int status_code) {
                            status_code, status_msg);
 
     if (body_len < 0 || body_len >= RESPONSE_BUFFER_SIZE) {
-         fprintf(stderr, "send_error_response: Failed to format body or buffer too small\n");
          body_len = 0;
     }
 
-    if (send_response_header(client_fd, status_code, "text/html", body_len) == ERR) {
-        return ERR;
+    if (send_response_header(client_fd, status_code, "text/html", body_len) == RESULT_ERR) {
+        return RESULT_ERR;
     }
 
     if (body_len > 0) {
         return send_all(client_fd, body, (size_t)body_len);
     }
-    
-    return OK; 
+
+    return RESULT_OK;
 }
 
 
-Result send_file_response(int client_fd, const char *file_path) {
+enum result send_file_contents(int client_fd, FILE *file) {
+    char file_buffer[FILE_BUFFER_SIZE];
+    size_t bytes_read;
+    while ((bytes_read = fread(file_buffer, 1, FILE_BUFFER_SIZE, file)) > 0) {
+        if (send_all(client_fd, file_buffer, bytes_read) == RESULT_ERR) {
+            return RESULT_ERR;
+        }
+    }
+
+    if (ferror(file)) {
+        return RESULT_ERR;
+    }
+    return RESULT_OK;
+}
+
+enum result send_file_response(int client_fd, const char *file_path) {
     FILE *file = fopen(file_path, "rb");
     if (!file) {
-        perror("fopen");
-        perror(file_path);
         if (errno == ENOENT) {
             return send_error_response(client_fd, 404);
         } else {
@@ -111,105 +128,104 @@ Result send_file_response(int client_fd, const char *file_path) {
         }
     }
 
-    fseek(file, 0, SEEK_END);
+    enum result res = RESULT_ERR;
+    if (fseek(file, 0, SEEK_END) != 0) {
+        send_error_response(client_fd, 500);
+        fclose(file);
+        return res;
+    }
+
     long file_size = ftell(file);
-    fseek(file, 0, SEEK_SET);
-
     if (file_size < 0) {
-        perror("ftell");
+        send_error_response(client_fd, 500);
         fclose(file);
-        return send_error_response(client_fd, 500);
+        return res;
     }
 
-    if (send_response_header(client_fd, 200, "text/html", file_size) == ERR) {
+    if (fseek(file, 0, SEEK_SET) != 0) {
+        send_error_response(client_fd, 500);
         fclose(file);
-        return ERR;
+        return res;
     }
 
-    char file_buffer[FILE_BUFFER_SIZE];
-    size_t bytes_read;
-    while ((bytes_read = fread(file_buffer, 1, FILE_BUFFER_SIZE, file)) > 0) {
-        if (send_all(client_fd, file_buffer, bytes_read) == ERR) {
-            fclose(file);
-            return ERR;
-        }
-    }
-
-    if (ferror(file)) {
-        perror("fread");
+    if (send_response_header(client_fd, 200, "text/html", file_size) == RESULT_ERR) {
         fclose(file);
-        return ERR;
+        return res;
     }
 
+    res = send_file_contents(client_fd, file);
     fclose(file);
-    return OK;
+    return res;
 }
 
-Result parse_request(const char *buffer, HttpRequest *req) {
+enum result parse_request(const char *buffer, struct http_request *req) {
     int matched = sscanf(buffer, "%15s %255s %15s", req->method, req->uri, req->version);
     if (matched != 3) {
-        fprintf(stderr, "parse_request: Failed to parse request line\n");
-        return ERR;
+        return RESULT_ERR;
     }
-    return OK;
+    return RESULT_OK;
 }
 
 
-Result handle_connection(int client_fd) {
-    char request_buffer[REQUEST_BUFFER_SIZE];
-    HttpRequest req;
+enum result handle_get_request(int client_fd, const struct http_request *req) {
     char file_path[FILE_PATH_MAX_LEN];
-    Result res = OK;
+    int path_len = snprintf(file_path, FILE_PATH_MAX_LEN,
+                            "%s%s/page.html", BASE_ROUTE_PATH, req->uri);
 
-    ssize_t bytes_received = recv(client_fd, request_buffer, REQUEST_BUFFER_SIZE - 1, 0);
-
-    if (bytes_received < 0) {
-        perror("recv");
-        res = ERR;
-    } else if (bytes_received == 0) {
-        fprintf(stderr, "handle_connection: Client disconnected\n");
-        res = ERR;
+    if (path_len < 0 || path_len >= FILE_PATH_MAX_LEN) {
+        return send_error_response(client_fd, 500);
     } else {
-        request_buffer[bytes_received] = '\0';
+        return send_file_response(client_fd, file_path);
+    }
+}
 
-        if (parse_request(request_buffer, &req) == ERR) {
-            res = send_error_response(client_fd, 400);
-        } else {
-            if (strcmp(req.method, "GET") != 0) {
-                res = send_error_response(client_fd, 405);
-            } else {
-                int path_len = snprintf(file_path, FILE_PATH_MAX_LEN,
-                                        "%s%s/page.html", BASE_ROUTE_PATH, req.uri);
-
-                if (path_len < 0 || path_len >= FILE_PATH_MAX_LEN) {
-                    fprintf(stderr, "handle_connection: File path too long or formatting error\n");
-                    res = send_error_response(client_fd, 500);
-                } else {
-                    res = send_file_response(client_fd, file_path);
-                }
-            }
-        }
+enum result process_request(int client_fd, const char *request_buffer) {
+    struct http_request req;
+    if (parse_request(request_buffer, &req) == RESULT_ERR) {
+        return send_error_response(client_fd, 400);
     }
 
-    close(client_fd);
+    if (strcmp(req.method, "GET") != 0) {
+        return send_error_response(client_fd, 405);
+    }
+
+    return handle_get_request(client_fd, &req);
+}
+
+enum result handle_connection(struct client_connection conn) {
+    char request_buffer[REQUEST_BUFFER_SIZE];
+    ssize_t bytes_received;
+    enum result res;
+
+    bytes_received = recv(conn.client_fd, request_buffer, REQUEST_BUFFER_SIZE - 1, 0);
+
+    if (bytes_received < 0) {
+        res = RESULT_ERR;
+    } else if (bytes_received == 0) {
+        res = RESULT_ERR;
+    } else {
+        request_buffer[bytes_received] = '\0';
+        res = process_request(conn.client_fd, request_buffer);
+    }
+
+    close(conn.client_fd);
     return res;
 }
 
 
-int setup_server(int port) {
-    int server_fd;
+enum result setup_server(int port, struct server_socket *server) {
     struct sockaddr_in address;
     int opt = 1;
+    int server_fd = -1;
 
-    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
-        perror("socket failed");
-        return -1;
+    server_fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (server_fd < 0) {
+        return RESULT_ERR;
     }
 
-    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) {
-        perror("setsockopt SO_REUSEADDR");
+    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
         close(server_fd);
-        return -1;
+        return RESULT_ERR;
     }
 
     address.sin_family = AF_INET;
@@ -217,46 +233,56 @@ int setup_server(int port) {
     address.sin_port = htons(port);
 
     if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
-        perror("bind failed");
         close(server_fd);
-        return -1;
+        return RESULT_ERR;
     }
 
     if (listen(server_fd, MAX_CONNECTIONS) < 0) {
-        perror("listen failed");
         close(server_fd);
-        return -1;
+        return RESULT_ERR;
     }
 
+    server->socket_fd = server_fd;
     printf("Server listening on port %d\n", port);
-    return server_fd;
+    return RESULT_OK;
 }
 
+enum result accept_connection(struct server_socket server, struct client_connection *conn) {
+    struct sockaddr_in client_addr;
+    socklen_t client_addr_len = sizeof(client_addr);
+    int client_fd = accept(server.socket_fd, (struct sockaddr *)&client_addr, &client_addr_len);
+
+    if (client_fd < 0) {
+        perror("accept failed");
+        conn->client_fd = -1;
+        return RESULT_ERR;
+    }
+    conn->client_fd = client_fd;
+    return RESULT_OK;
+}
+
+
 int main() {
-    int server_fd = setup_server(PORT);
-    if (server_fd < 0) {
-        return EXIT_FAILURE;
+    struct server_socket server;
+
+    if (setup_server(PORT, &server) == RESULT_ERR) {
+        perror("Server setup failed");
+        return 1;
     }
 
     while (1) {
-        struct sockaddr_in client_addr;
-        socklen_t client_addr_len = sizeof(client_addr);
-        int client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &client_addr_len);
+        struct client_connection conn;
 
-        if (client_fd < 0) {
-            perror("accept failed");
-            continue;
-        }
-
-        printf("Connection accepted\n");
-        
-        if (handle_connection(client_fd) == ERR) {
-             fprintf(stderr, "Failed to handle connection fully.\n");
-        } else {
-             printf("Connection handled successfully.\n");
+        if (accept_connection(server, &conn) == RESULT_OK) {
+             printf("Connection accepted\n");
+             if (handle_connection(conn) == RESULT_ERR) {
+                 fprintf(stderr, "Failed to handle connection fully.\n");
+             } else {
+                 printf("Connection handled successfully.\n");
+             }
         }
     }
 
-    close(server_fd);
-    return EXIT_SUCCESS;
+    close(server.socket_fd);
+    return 0;
 }
