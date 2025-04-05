@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lkjsxc's Portfolio</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header, section {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #0056b3;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 5px;
+            margin-top: 0;
+        }
+        ul {
+            list-style: disc;
+            margin-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .project-item {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #ccc;
+        }
+        .project-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .project-item h3 {
+            margin-top: 0;
+            color: #17a2b8;
+        }
+        .skills-list {
+            padding-left: 0;
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .skills-list li {
+            background-color: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        @media (max-width: 600px) {
+            body {
+                margin: 10px;
+            }
+            header, section {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            h2 {
+                font-size: 1.3em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>lkjsxc's Portfolio</h1>
+        <p>ZEN大学に在籍し、ソフトウェア開発を中心に幅広い技術分野を独学で探求しています。新しい技術への好奇心が強く、思い立ったらすぐに行動に移すことを信条としています。</p>
+    </header>
+
+    <section id="about">
+        <h2>自己紹介</h2>
+        <p>
+            lkjsxcと申します。プログラミングの面白さに魅了され、特に低レイヤー技術や言語処理系、Web技術に強い関心を持っています。
+            日々の学びや開発の記録をつけ、常に自身のスキルアップと知識の深化を目指しています。
+            オンラインコミュニティでの交流や、友人との共同プロジェクトを通じて、コミュニケーション能力や協調性も養っています。
+        </p>
+        <p><strong>興味分野:</strong> 低レイヤー技術 (UEFIアプリケーション、OS開発)、Web開発 (フロントエンド、バックエンド)、プログラミング言語理論・実装、機械学習（CUDA C++）、サーバー構築・運用</p>
+    </section>
+
+    <section id="skills">
+        <h2>スキルセット</h2>
+        <ul class="skills-list">
+            <li>C</li>
+            <li>Rust</li>
+            <li>Python</li>
+            <li>JavaScript</li>
+            <li>TypeScript</li>
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>Svelte</li>
+            <li>Node.js</li>
+            <li>Linux (Arch, Ubuntu)</li>
+            <li>Windows</li>
+            <li>Docker</li>
+            <li>Git / GitHub</li>
+            <li>Cloudflare</li>
+            <li>サーバー構築・運用</li>
+            <li>Nostrプロトコル</li>
+            <li>タイピング (e-typing スコア400超)</li>
+            <li>基本情報技術者試験 合格</li>
+            <li>高等学校卒業程度認定試験 合格</li>
+        </ul>
+    </section>
+
+    <section id="projects">
+        <h2>プロジェクト・活動実績</h2>
+
+        <div class="project-item">
+            <h3>自作UEFIアプリケーション開発</h3>
+            <p><strong>時期:</strong> 2024年4月頃</p>
+            <p><strong>概要:</strong> C言語を用いて、基本的なファイル操作 (ls, putc)、ファイルシステム機能、ハッシュテーブルなどを含む学習用の開発に取り組みました。</p>
+            <p><strong>使用技術:</strong> C言語</p>
+            <p><strong>学び:</strong> コンピュータの動作原理や低レイヤー技術への理解を深めました。限られた情報から必要な知識を取捨選択し、実装を進める経験を得ました。</p>
+        </div>
+
+        <div class="project-item">
+            <h3>テキストエディタ開発</h3>
+            <p><strong>時期:</strong> 2024年3月下旬〜断続的に継続</p>
+            <p><strong>概要:</strong> C言語およびRustを用いて、複数回にわたりテキストエディタの開発に挑戦。基本的な編集機能（挿入、削除、カーソル移動）から始め、スクリプト言語の埋め込みを試みるなど、段階的に機能拡張を行いました。</p>
+            <p><strong>使用技術:</strong> C, Rust</p>
+            <p><strong>学び:</strong> 実用的なツールの開発プロセス、データ構造の選択、パフォーマンスへの意識、異なる言語（CとRust）の特性やメモリ管理の違いを学びました。開発成果の一部はQiita記事（旧名義: sxclij）として公開し、フィードバックを元に改善する経験もしました。</p>
+        </div>
+
+        <div class="project-item">
+            <h3>Brainfuck処理系開発</h3>
+            <p><strong>時期:</strong> 2024年7月頃、9月頃</p>
+            <p><strong>概要:</strong> Brainfuck言語のインタプリタおよびコンパイラ（C言語へのトランスパイラ）を開発しました。インタプリタの最適化を行い、実行速度を約10倍向上させました。</p>
+            <p><strong>使用技術:</strong> C言語 (推測)</p>
+            <p><strong>学び:</strong> 言語処理系の基本的な仕組み、インタプリタとコンパイラの違い、コード最適化の考え方を実践的に学びました。成果はNote（旧名義: sxclij）で解説記事として公開しました。</p>
+        </div>
+
+        <div class="project-item">
+            <h3>自作プログラミング言語開発</h3>
+            <p><strong>時期:</strong> 2024年9月下旬〜断続的に継続</p>
+            <p><strong>概要:</strong> C言語を用いて独自のスタックベースのスクリプト言語「sxclijscript」を設計・開発。パーサ、VM、基本的な制御構文（if, loop）、関数定義、ラベルジャンプ、プリプロセッサ機能などを実装しました。また、Scratch上でのVM実装やCanvas APIとの連携も試みました。</p>
+            <p><strong>使用技術:</strong> C言語, Scratch</p>
+            <p><strong>学び:</strong> プログラミング言語の設計から実装までの一連の流れ、構文解析、仮想マシンの仕組み、デバッグの重要性を深く理解しました。Qiita記事（旧名義: sxclij）での解説と、読者からの指摘に基づく改善も経験しました。</p>
+        </div>
+
+        <div class="project-item">
+            <h3>Webサイト (ポートフォリオ/ブログ) 構築・運用</h3>
+            <p><strong>時期:</strong> 2024年12月頃〜</p>
+            <p><strong>概要:</strong> 自身の活動を発信するため、Webサイトを構築・運用。当初Svelteを用いて開発を開始し、その後学習目的でC言語によるシンプルなHTTPサーバ実装にも挑戦しました。Cloudflareを利用して独自ドメイン (sxclij.com ※旧活動で使用) を取得・設定し、HTTPS化やDNS管理を行いました。</p>
+            <p><strong>使用技術:</strong> Svelte, C, HTML, CSS, JavaScript, Cloudflare, Git/GitHub</p>
+            <p><strong>学び:</strong> Webフロントエンドフレームワーク (Svelte) の利用経験、HTTPプロトコルの基礎、Webサーバーの仕組み、DNSやCDNなどのWebインフラに関する知識を習得しました。</p>
+        </div>
+
+        <div class="project-item">
+            <h3>Nostr (分散型SNSプロトコル) 関連開発</h3>
+            <p><strong>時期:</strong> 2024年8月頃〜</p>
+            <p><strong>概要:</strong> Nostrプロトコルに関心を持ち、JavaScript (Node.js) を用いたbot開発や、Svelteとrx-nostrライブラリを用いたクライアント開発に挑戦しました。また、自身でNostrリレーサーバーを運用した経験もあります。</p>
+            <p><strong>使用技術:</strong> JavaScript, Node.js, Svelte, rx-nostr, (Nostrプロトコル)</p>
+            <p><strong>学び:</strong> 分散型システムのプロトコルへの理解、WebSocket通信、非同期処理、外部ライブラリの活用方法を学びました。</p>
+        </div>
+
+         <div class="project-item">
+            <h3>その他活動</h3>
+            <ul>
+                <li><strong>Linux環境構築とカスタマイズ:</strong> Arch Linux, Ubuntu, NixOSなど、複数のLinuxディストリビューションの導入・設定経験。特にArch Linuxは20回以上インストールし直しては破壊を繰り返し、環境構築スキルを磨きました。</li>
+                <li><strong>サーバー構築・運用:</strong> 自宅サーバーを利用し、Minecraftサーバー、ArkサーバーなどをDocker、nginxを用いて構築・運用。</li>
+                <li><strong>機械学習・強化学習への挑戦:</strong> CUDA C++、C言語でのニューラルネットワーク実装や、強化学習ライブラリの利用に挑戦し、基礎的な概念を学習しました。</li>
+                <li><strong>競技プログラミング:</strong> AtCoderに参加し、アルゴリズムとデータ構造の学習を進めています。(目標: 水コーダー)</li>
+            </ul>
+        </div>
+
+    </section>
+
+    <section id="learning">
+        <h2>学習への取り組み</h2>
+        <p>
+            新しい知識や技術を習得することに喜びを感じ、継続的な学習を心がけています。
+        </p>
+        <ul>
+            <li><strong>書籍:</strong> OS、x86アーキテクチャ、金融、情報収集術など、幅広い分野の書籍を読んでいます。特に技術書については、GitHubリポジトリで読書メモを管理し、知識の定着を図っています。</li>
+            <li><strong>オンライン学習:</strong> スタディサプリ（高卒認定）、CPAラーニング（簿記3級）、Progate Path（Web開発）などを活用し、体系的な知識を補っています。</li>
+            <li><strong>情報収集:</strong> RSSリーダー (Feedly) やオンラインコミュニティ (Nostr等)、技術系メディア (WIRED等)、Voicyなどを通じて、常に最新の技術動向や多様な考え方に触れるように心がけています。</li>
+            <li><strong>自己分析と記録:</strong> 日記やスプレッドシート、GitHubを用いて日々の活動や学習内容を記録・振り返り、学習効率の改善や目標設定に役立てています。</li>
+            <li><strong>資格取得:</strong> 高等学校卒業程度認定試験に加え、IT分野の基礎知識を証明するため基本情報技術者試験に合格しました。</li>
+        </ul>
+    </section>
+
+    <section id="links">
+        <h2>関連リンク</h2>
+        <ul>
+            <li><a href="https://github.com/lkjsxc" target="_blank">GitHub (lkjsxc)</a> - 現在の活動リポジトリ</li>
+        </ul>
+    </section>
+
+    <footer>
+        <p>© 2025 lkjsxc</p>
+    </footer>
+
+</body>
+</html>
