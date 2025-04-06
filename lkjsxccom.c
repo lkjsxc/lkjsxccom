@@ -8,8 +8,9 @@
 
 #define PORT 8080
 #define MAX_CONNECTIONS 10
-#define REQUEST_BUFFER_SIZE 16384
-#define RESPONSE_BUFFER_SIZE 512
+#define REQUEST_BUFFER_SIZE 2048
+#define RESPONSE_BUFFER_SIZE 1024 * 1024 * 16
+#define ERRORRESPONSE_BUFFER_SIZE 2048
 #define FILE_BUFFER_SIZE 1024
 #define METHOD_MAX_LEN 16
 #define URI_MAX_LEN 256
@@ -35,6 +36,8 @@ struct server_socket {
 struct client_connection {
     int client_fd;
 };
+
+static char response_buffer[RESPONSE_BUFFER_SIZE];
 
 const char *http_status_message(int status_code) {
     switch (status_code) {
@@ -63,8 +66,7 @@ enum result send_all(int sockfd, const char *buffer, size_t length) {
 }
 
 enum result send_response_header(int client_fd, int status_code, const char *content_type, long content_length) {
-    char response_header[RESPONSE_BUFFER_SIZE];
-    int header_len = snprintf(response_header, RESPONSE_BUFFER_SIZE,
+    int header_len = snprintf(response_buffer, RESPONSE_BUFFER_SIZE,
                               "HTTP/1.1 %d %s\r\n"
                               "Content-Type: %s\r\n"
                               "Content-Length: %ld\r\n"
@@ -77,17 +79,17 @@ enum result send_response_header(int client_fd, int status_code, const char *con
         return RESULT_ERR;
     }
 
-    return send_all(client_fd, response_header, (size_t)header_len);
+    return send_all(client_fd, response_buffer, (size_t)header_len);
 }
 
 enum result send_error_response(int client_fd, int status_code) {
-    char body[RESPONSE_BUFFER_SIZE];
+    char body[ERRORRESPONSE_BUFFER_SIZE];
     const char *status_msg = http_status_message(status_code);
-    int body_len = snprintf(body, RESPONSE_BUFFER_SIZE,
+    int body_len = snprintf(body, ERRORRESPONSE_BUFFER_SIZE,
                            "<html><body><h1>%d %s</h1></body></html>",
                            status_code, status_msg);
 
-    if (body_len < 0 || body_len >= RESPONSE_BUFFER_SIZE) {
+    if (body_len < 0 || body_len >= ERRORRESPONSE_BUFFER_SIZE) {
          body_len = 0;
     }
 
