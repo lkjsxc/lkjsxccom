@@ -10,7 +10,7 @@
 #include <unistd.h>
 
 #define PORT 8080
-#define MAX_CONNECTIONS 12
+#define MAX_CONNECTIONS 24
 #define REQUEST_BUFFER_SIZE 2048
 
 #define RESPONSE_BUFFER_SIZE 2048
@@ -227,7 +227,7 @@ enum result parse_request(struct connection* conn) {
 enum result build_file_path(struct connection* conn) {
     const char* uri_target = conn->uri;
 
-    int len = snprintf(conn->file_path, FILE_PATH_MAX_LEN, "%s%spage.html", BASE_ROUTE_PATH, uri_target);
+    int len = snprintf(conn->file_path, FILE_PATH_MAX_LEN, "%s%s/page.html", BASE_ROUTE_PATH, uri_target);
 
     if (len < 0 || len >= FILE_PATH_MAX_LEN) {
         fprintf(stderr, "Error formatting file path or path too long for URI: %s\n", conn->uri);
