@@ -14,46 +14,86 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh; /* Use min-height for flexibility */
             margin: 0;
-            overflow: hidden; /* Prevent scrollbars */
+            padding: 1rem 0; /* Add some padding top/bottom */
+            box-sizing: border-box;
         }
 
         #game-container {
+            display: flex; /* Use flexbox for layout */
+            flex-direction: row; /* Arrange side panels and main game */
+            align-items: flex-start; /* Align items at the top */
+            justify-content: center;
+            gap: 1.5rem; /* Space between panels and game */
+            width: 95%;
+            max-width: 650px; /* Increased max-width to accommodate side panels */
+            padding: 1rem;
+            border-radius: 0.75rem;
+            /* background-color: #1F2937; */ /* Optional container background */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            box-sizing: border-box;
+            margin-bottom: 1rem; /* Space below container */
+        }
+
+        /* --- Side Panels --- */
+        .side-panel {
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 95%;
-            max-width: 1200px; /* Responsive max width */
-            padding: 1.25rem;
-            border-radius: 0.75rem; /* Rounded corners */
-            /*background-color: #1F2937; !* Darker container background *!*/
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Subtle shadow */
-            box-sizing: border-box;
-            margin-bottom: 2rem;
+            width: 100px; /* Fixed width for side panels */
+            padding-top: 2rem; /* Align roughly with top of game board */
+        }
+        .side-panel h3 {
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+            color: #cbd5e0;
+            text-align: center;
+        }
+        .side-panel canvas {
+            background-color: #1f2937; /* Dark grey canvas background */
+            border: 2px solid #4b5563; /* Darker border */
+            border-radius: 0.25rem;
+            width: 100%; /* Fill panel width */
+            aspect-ratio: 1 / 1; /* Keep it square */
+            margin-bottom: 1rem;
+        }
+
+        /* --- Center Content (Game Area & Controls) --- */
+        #center-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-grow: 1; /* Allow center to take remaining space if needed */
+            max-width: 320px; /* Max width for the canvas itself */
         }
 
         h1 {
             margin-top: 0;
             margin-bottom: 0.5rem;
-            font-size: 2rem; /* Larger heading */
+            font-size: 1.8rem; /* Slightly smaller title */
             color: #6366f1; /* Vibrant purple */
             text-shadow: 0 0 0.25rem rgba(100, 116, 139, 0.8);
+            text-align: center;
         }
-        @media (max-width: 400px){
+        @media (max-width: 600px){
            h1{
-             font-size: 1.75rem
+             font-size: 1.5rem
            }
         }
 
         #score-level {
+            margin-top: 1rem; /* Space below Hold */
             margin-bottom: 1rem;
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: #cbd5e0;
+            text-align: center;
+            order: 1; /* Display below Hold canvas in the left panel */
+            width: 100%;
         }
 
-        #canvas {
-          /* background-color: #374151; !* Dark grey canvas background *!*/
+        #main-canvas { /* Renamed from #canvas */
+          /* background-color: #374151; */ /* Dark grey canvas background */
             border: 0.25rem solid #4b5563; /* Darker border */
             border-radius: 0.5rem;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -64,19 +104,27 @@
             aspect-ratio: 1 / 2;
         }
        @media (max-width: 400px){
-          #canvas{
+          #main-canvas{
              max-width: 95%;
           }
        }
 
+        /* --- Controls below canvas --- */
+        #controls {
+           display: flex;
+           flex-wrap: wrap; /* Allow buttons to wrap on small screens */
+           justify-content: center;
+           gap: 0.5rem;
+        }
+
         .button {
-            padding: 0.75rem 1.5rem;
-            margin: 0.5rem;
+            padding: 0.75rem 1rem; /* Slightly smaller padding */
+            margin: 0.25rem; /* Reduced margin */
             border: none;
             border-radius: 0.5rem;
             background-color: #4caf50; /* Green */
             color: white;
-            font-size: 1rem;
+            font-size: 0.8rem; /* Smaller font */
             cursor: pointer;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
             transition: background-color 0.3s ease, transform 0.2s ease;
@@ -99,257 +147,177 @@
             transform: none;
         }
 
+        /* --- Menu Styling (Mostly unchanged) --- */
         #menu-container {
-            position: absolute; /* Overlay the entire screen */
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8); /* Dark semi-transparent overlay */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); display: flex; flex-direction: column;
+            align-items: center; justify-content: center; z-index: 10;
         }
-
         #menu-content {
-            background-color: #242424; /* Dark menu background */
-            padding: 2rem;
-            border-radius: 0.75rem;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            width: 90%;
-            max-width: 400px;
-            box-sizing: border-box;
+            background-color: #242424; padding: 2rem; border-radius: 0.75rem;
+            text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            width: 90%; max-width: 400px; box-sizing: border-box;
         }
-
-        #menu-content h2 {
-            margin-top: 0;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-            color: #f5f5f5;
-        }
-
-        #menu-content ul {
-            list-style: none;
-            padding: 0;
-            margin-bottom: 1rem;
-        }
-
+        #menu-content h2 { margin-top: 0; margin-bottom: 1rem; font-size: 1.5rem; color: #f5f5f5; }
+        #menu-content ul { list-style: none; padding: 0; margin-bottom: 1rem; }
         #menu-content li {
-            margin-bottom: 0.75rem;
-            font-size: 1rem;
-            color: #d1d5db;
-            cursor: pointer; /* Indicate clickable items */
-            padding: 0.25rem 0;
-            transition: color 0.2s ease;
+            margin-bottom: 0.75rem; font-size: 1rem; color: #d1d5db; cursor: pointer;
+            padding: 0.25rem 0; transition: color 0.2s ease;
         }
-         #menu-content li:hover {
-            color: #ffffff; /* Highlight on hover */
-         }
+        #menu-content li:hover { color: #ffffff; }
+        #menu-content li span { color: #fff; }
 
-         #menu-content li span{
-            color: #fff;
-         }
-
-         /* Specific styling for How to Play */
+         /* Updated How to Play */
          #how-to-play-menu li {
-            font-size: 0.9rem;
-            text-align: left;
-            margin-left: 1rem;
-            cursor: default; /* Not clickable */
-            line-height: 1.5; /* Better spacing for instructions */
+            font-size: 0.85rem; /* Slightly adjusted */
+            text-align: left; margin-left: 1rem; cursor: default; line-height: 1.6; /* Increased line height */
          }
-         #how-to-play-menu li:hover {
-            color: #d1d5db; /* No highlight on hover */
-         }
+         #how-to-play-menu li:hover { color: #d1d5db; }
          #how-to-play-menu li.control-key {
-            font-weight: bold;
-            color: #a5b4fc; /* Light indigo for keys */
-            display: inline-block;
-            width: 6rem; /* Align keys */
+            font-weight: bold; color: #a5b4fc; display: inline-block;
+            width: 7rem; /* Increased width for longer keys like Space */
          }
-         #how-to-play-menu li.control-action {
-             color: #f9fafb; /* White for actions */
-         }
+         #how-to-play-menu li.control-action { color: #f9fafb; }
          #how-to-play-menu li.back-button {
-            cursor: pointer;
-            text-align: center;
-            margin-top: 1rem;
-            margin-left: 0; /* Reset margin */
-            font-weight: bold;
-            color: #6366f1; /* Purple for back button */
+            cursor: pointer; text-align: center; margin-top: 1rem; margin-left: 0;
+            font-weight: bold; color: #6366f1;
          }
-         #how-to-play-menu li.back-button:hover {
-            color: #818cf8; /* Lighter purple on hover */
-         }
-
+         #how-to-play-menu li.back-button:hover { color: #818cf8; }
 
         #message-box {
-            position: absolute;
-            bottom: 2rem;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            z-index: 10;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
+            position: fixed; /* Use fixed to keep it relative to viewport */
+            bottom: 1rem; /* Closer to bottom edge */
+            left: 50%; /* Center horizontally */
+            transform: translateX(-50%); /* Correct centering */
+            background-color: rgba(0, 0, 0, 0.75); color: white; padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem; font-size: 0.9rem; z-index: 15; /* Above menu overlay */
+            opacity: 0; transition: opacity 0.3s ease-in-out;
+            text-align: center;
         }
+        .show-message { opacity: 1; }
 
-        .show-message {
-            opacity: 1;
-        }
-       .settings-group {
-          margin-bottom: 1rem;
-          text-align: left;
-          width: 100%;
-       }
-      .settings-group label {
-        display: block;
-        margin-bottom: 0.5rem;
-        font-size: 0.875rem;
-        color: #cbd5e0;
-      }
-      .settings-group input[type="range"],
-      .settings-group select {
-        width: 100%;
-        padding: 0.5rem;
-        border-radius: 0.375rem;
-        border: 1px solid #4b5563;
-        background-color: #374151;
-        color: #f9fafb;
-        font-size: 0.875rem;
-        box-sizing: border-box;
-      }
-      .settings-group select{
-         appearance: none; /* Remove default arrow */
-         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 011.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd' /%3E%3C/svg%3E"); /* Custom arrow */
-        background-repeat: no-repeat;
-        background-position: right 0.5rem center;
-        background-size: 1rem;
-      }
-      .settings-group select:focus {
-        outline: none;
-        border-color: #6366f1; /* Highlight on focus */
-        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2); /* Focus shadow */
-      }
-      input[type="range"] {
-        -webkit-appearance: none;
-        appearance: none;
-        background: transparent;
-        cursor: pointer;
-        width: 100%;
-      }
-      input[type="range"]:focus {
-        outline: none;
-      }
-      input[type="range"]::-webkit-slider-runnable-track {
-        background: #374151;
-        border-radius: 0.5rem;
-        height: 0.5rem;
-        cursor: pointer;
-      }
-       input[type="range"]::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          appearance: none;
-          height: 1.25rem;
-          width: 1.25rem;
-          background: #6366f1;
-          border-radius: 50%;
-          border: 2px solid #fff;
-          margin-top: -0.375rem;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-        }
-       input[type="range"]::-webkit-slider-thumb:hover,
-        input[type="range"]::-webkit-slider-thumb:active {
-          transform: scale(1.1);
-        }
-        /* Firefox styles */
-        input[type="range"]::-moz-range-track {
-            background: #374151;
-            border-radius: 0.5rem;
-            height: 0.5rem;
-            cursor: pointer;
-        }
-
-        input[type="range"]::-moz-range-thumb {
-            height: 1.25rem;
-            width: 1.25rem;
-            background: #6366f1;
-            border-radius: 50%;
-            border: 2px solid #fff;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-        }
-
-        input[type="range"]::-moz-range-thumb:hover,
-        input[type="range"]::-moz-range-thumb:active {
-            transform: scale(1.1);
-        }
+       /* Settings Menu (Unchanged) */
+       .settings-group { margin-bottom: 1rem; text-align: left; width: 100%; }
+       .settings-group label { display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: #cbd5e0; }
+       /* ... (rest of settings styles are unchanged) ... */
 
         /* Responsive adjustments */
-        @media (max-width: 768px) {
+        @media (max-width: 650px) { /* Adjust breakpoint */
             #game-container {
-                width: 98%;
-            }
-            #menu-content {
+                flex-direction: column; /* Stack vertically on smaller screens */
+                align-items: center;
                 width: 95%;
+                max-width: 400px; /* Adjust max-width for vertical layout */
+                gap: 1rem;
             }
-            .button {
-                font-size: 0.9rem;
-                padding: 0.75rem 1rem;
+            #center-content {
+                 order: 1; /* Game in the middle */
+                 width: 100%;
+                 max-width: 320px;
             }
-            h1 {
-                font-size: 1.75rem;
+            .side-panel {
+                flex-direction: row; /* Side panels become horizontal rows */
+                justify-content: space-around; /* Space out items */
+                width: 100%;
+                max-width: 320px;
+                padding-top: 0; /* Reset padding */
+                order: 0; /* Place panels above game */
+                gap: 1rem;
             }
-            #score-level{
-              font-size: 0.875rem;
+            .side-panel > div { /* Wrap canvas/text in divs for better layout */
+               display: flex;
+               flex-direction: column;
+               align-items: center;
+               width: 80px; /* Smaller width for items */
             }
+            .side-panel canvas {
+                width: 80px;
+                height: 80px;
+                aspect-ratio: 1/1;
+                 margin-bottom: 0.5rem;
+            }
+             .side-panel h3 {
+                 font-size: 0.7rem;
+             }
+             #score-level {
+                order: initial; /* Reset order */
+                margin-top: 0;
+                text-align: center;
+                font-size: 0.8rem;
+                width: auto; /* Let it size naturally */
+             }
+            #left-panel { order: 0; }
+            #right-panel { order: 2; } /* Next piece below controls */
+            #controls { order: 3; width: 100%; } /* Controls at the bottom */
+
+            h1 { font-size: 1.5rem; }
+            .button { font-size: 0.75rem; padding: 0.6rem 0.8rem; }
         }
 
-        @media (max-width: 480px) {
-            .button {
-                font-size: 0.8rem;
-                padding: 0.5rem 1rem;
-            }
-             h1{
-                font-size: 1.5rem;
-             }
-              #score-level{
-                font-size: 0.75rem;
-              }
-            #menu-content {
-                padding: 1.5rem;
-            }
-            #menu-content h2 {
-                font-size: 1.25rem;
-            }
-            #menu-content li {
-                font-size: 0.9rem;
-            }
-            #how-to-play-menu li {
-                font-size: 0.8rem; /* Smaller font for instructions on small screens */
-            }
-            #how-to-play-menu li.control-key {
-                width: 5rem; /* Adjust key width */
-            }
+        @media (max-width: 400px) {
+             .side-panel > div { width: 70px; }
+             .side-panel canvas { width: 70px; height: 70px; }
+             h1 { font-size: 1.3rem; }
+             #score-level { font-size: 0.7rem; }
+             .button { font-size: 0.7rem; padding: 0.5rem 0.7rem; }
+             #menu-content li { font-size: 0.9rem; }
+             #how-to-play-menu li { font-size: 0.8rem; }
+             #how-to-play-menu li.control-key { width: 6rem; }
         }
+
+        /* Styles for input range remain the same */
+        .settings-group input[type="range"],
+        .settings-group select { width: 100%; padding: 0.5rem; border-radius: 0.375rem; border: 1px solid #4b5563; background-color: #374151; color: #f9fafb; font-size: 0.875rem; box-sizing: border-box; }
+        .settings-group select{ appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 011.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd' /%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.5rem center; background-size: 1rem; }
+        .settings-group select:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2); }
+        input[type="range"] { -webkit-appearance: none; appearance: none; background: transparent; cursor: pointer; width: 100%; }
+        input[type="range"]:focus { outline: none; }
+        input[type="range"]::-webkit-slider-runnable-track { background: #374151; border-radius: 0.5rem; height: 0.5rem; cursor: pointer; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; height: 1.25rem; width: 1.25rem; background: #6366f1; border-radius: 50%; border: 2px solid #fff; margin-top: -0.375rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); }
+        input[type="range"]::-webkit-slider-thumb:hover, input[type="range"]::-webkit-slider-thumb:active { transform: scale(1.1); }
+        input[type="range"]::-moz-range-track { background: #374151; border-radius: 0.5rem; height: 0.5rem; cursor: pointer; }
+        input[type="range"]::-moz-range-thumb { height: 1.25rem; width: 1.25rem; background: #6366f1; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); }
+        input[type="range"]::-moz-range-thumb:hover, input[type="range"]::-moz-range-thumb:active { transform: scale(1.1); }
+
     </style>
 </head>
 <body>
     <div id="game-container">
-        <h1>Tetris</h1>
-        <p id="score-level">Score: <span>0</span> | Level: <span>1</span></p>
-        <canvas id="canvas"></canvas>
+        <!-- Left Side Panel -->
+        <div class="side-panel" id="left-panel">
+            <!-- Wrap Hold elements -->
+            <div>
+                <h3>Hold</h3>
+                <canvas id="hold-canvas"></canvas>
+            </div>
+             <!-- Wrap Score/Level -->
+             <div>
+                <p id="score-level">Score: <span>0</span><br>Level: <span>1</span></p>
+             </div>
+        </div>
 
-        <button id="pause-resume-button" class="button" disabled>Pause</button>
-        <button id="settings-button" class="button secondary">Settings</button>
-        <button id="menu-button" class="button secondary">Menu</button>
+        <!-- Center Content -->
+        <div id="center-content">
+            <h1>Tetris</h1>
+            <canvas id="main-canvas"></canvas> <!-- Renamed canvas -->
+            <div id="controls">
+                <button id="pause-resume-button" class="button" disabled>Pause</button>
+                <button id="settings-button" class="button secondary">Settings</button>
+                <button id="menu-button" class="button secondary">Menu</button>
+            </div>
+        </div>
 
+        <!-- Right Side Panel -->
+        <div class="side-panel" id="right-panel">
+            <!-- Wrap Next elements -->
+            <div>
+                <h3>Next</h3>
+                <canvas id="next-canvas"></canvas>
+            </div>
+        </div>
+
+        <!-- Message Box and Menu Container (remain outside flex layout) -->
         <div id="message-box"></div>
-
         <div id="menu-container"> <div id="menu-content">
                 <h2 id="menu-title">Menu</h2>
                 <ul id="main-menu">
@@ -357,15 +325,19 @@
                     <li data-action="howToPlay">How to Play</li>
                     <li data-action="settings">Settings</li>
                     </ul>
+                <!-- Updated How to Play Menu -->
                 <ul id="how-to-play-menu" style="display: none;">
                     <li><span class="control-key">Left Arrow:</span> <span class="control-action">Move Left</span></li>
                     <li><span class="control-key">Right Arrow:</span> <span class="control-action">Move Right</span></li>
-                    <li><span class="control-key">Down Arrow:</span> <span class="control-action">Soft Drop / Fast Drop</span></li>
-                    <li><span class="control-key">Z Key:</span> <span class="control-action">Rotate Clockwise</span></li>
-                    <li><span class="control-key">X Key:</span> <span class="control-action">Rotate Counter-Clockwise</span></li>
+                    <li><span class="control-key">Down Arrow:</span> <span class="control-action">Soft Drop</span></li>
+                    <li><span class="control-key">Space Bar:</span> <span class="control-action">Hard Drop</span></li>
+                    <li><span class="control-key">Z Key:</span> <span class="control-action">Rotate Left (CCW)</span></li>
+                    <li><span class="control-key">X Key:</span> <span class="control-action">Rotate Right (CW)</span></li>
+                    <li><span class="control-key">C Key:</span> <span class="control-action">Hold Piece</span></li>
                     <li><span class="control-key">P Key:</span> <span class="control-action">Pause / Resume</span></li>
                     <li class="back-button" data-action="backToMainMenu">Back</li>
                 </ul>
+                <!-- Rest of the menus remain the same -->
                 <ul id="settings-menu" style="display: none;">
                     <li data-action="difficulty">Difficulty: <span>Medium</span></li>
                     <li data-action="sound">Sound: <span>On</span></li>
@@ -385,9 +357,14 @@
     <script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.min.js"></script>
     <script>
         // --- DOM Elements ---
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        const scoreLevelDisplay = document.getElementById('score-level');
+        const mainCanvas = document.getElementById('main-canvas'); // Renamed
+        const mainCtx = mainCanvas.getContext('2d');              // Renamed
+        const nextCanvas = document.getElementById('next-canvas');
+        const nextCtx = nextCanvas.getContext('2d');
+        const holdCanvas = document.getElementById('hold-canvas');
+        const holdCtx = holdCanvas.getContext('2d');
+        const scoreLevelDisplay = document.getElementById('score-level').querySelector('span'); // Target span directly
+        const scoreLevelContainer = document.getElementById('score-level'); // Target the container for text updates
         const pauseResumeButton = document.getElementById('pause-resume-button');
         const settingsButton = document.getElementById('settings-button');
         const menuButton = document.getElementById('menu-button');
@@ -404,18 +381,24 @@
         // --- Game Constants ---
         const GRID_WIDTH = 10;
         const GRID_HEIGHT = 20;
-        const FAST_DROP_SPEED = 50;
+        const SIDE_CANVAS_GRID_SIZE = 4; // How many blocks wide/high for side canvas previews
+        const SOFT_DROP_MULTIPLIER = 10; // How much faster soft drop is than normal speed
         const TARGET_FPS = 60;
         const FRAME_TIME = 1000 / TARGET_FPS;
 
         // --- Game Variables ---
-        let gridSize = 32;
+        let mainGridSize = 32; // Size for the main game canvas blocks
+        let sideGridSize = 20; // Size for the next/hold canvas blocks
         let gameGrid = createEmptyGrid();
         let currentTetromino = null;
+        let nextTetromino = null;    // Added
+        let heldTetromino = null;    // Added
+        let canHold = true;         // Added
         let score = 0;
         let level = 1;
-        let gameSpeed = 750;
-        let dropInterval = gameSpeed;
+        let baseSpeed = 750;        // Base speed determined by difficulty
+        let gameSpeed = baseSpeed;    // Current game speed
+        let dropInterval = gameSpeed; // Current interval for automatic drop
         let dropTimer = 0;
         let isPaused = true;
         let isGameOver = false;
@@ -423,51 +406,52 @@
         let difficulty = 'medium';
         let animationFrameId = null;
         let lastTime = 0;
-        let isFastDropping = false;
+        let isSoftDropping = false; // Changed from isFastDropping
 
         // --- Tetromino Data ---
         const tetrominoShapes = [
-            [[1, 1, 1, 1]], // I
-            [[1, 0, 0], [1, 1, 1]], // J
-            [[0, 0, 1], [1, 1, 1]], // L
-            [[1, 1], [1, 1]], // O
-            [[0, 1, 1], [1, 1, 0]], // S
-            [[0, 1, 0], [1, 1, 1]], // T
-            [[1, 1, 0], [0, 1, 1]]  // Z
+            // I
+            { shape: [[1, 1, 1, 1]], color: '#00ffff', name: 'I' },
+            // J
+            { shape: [[1, 0, 0], [1, 1, 1]], color: '#0000ff', name: 'J' },
+            // L
+            { shape: [[0, 0, 1], [1, 1, 1]], color: '#ffaa00', name: 'L' },
+            // O
+            { shape: [[1, 1], [1, 1]], color: '#ffff00', name: 'O' },
+            // S
+            { shape: [[0, 1, 1], [1, 1, 0]], color: '#00ff00', name: 'S' },
+            // T
+            { shape: [[0, 1, 0], [1, 1, 1]], color: '#aa00ff', name: 'T' },
+            // Z
+            { shape: [[1, 1, 0], [0, 1, 1]], color: '#ff0000', name: 'Z' }
         ];
-        const tetrominoColors = ['#00ffff', '#0000ff', '#ffaa00', '#ffff00', '#00ff00', '#aa00ff', '#ff0000'];
 
         // --- Sound Effects (Tone.js) ---
-        let pieceLandedSound, clearLineSound, gameOverSound, buttonClickSound, levelUpSound;
+        let pieceLandedSound, clearLineSound, gameOverSound, buttonClickSound, levelUpSound, holdSound, hardDropSound; // Added hold/hard drop sounds
         function initializeSounds() {
-            if (!pieceLandedSound) {
-                pieceLandedSound = new Tone.Synth().toDestination();
-                pieceLandedSound.oscillator.type = 'triangle';
-                clearLineSound = new Tone.Synth().toDestination();
-                clearLineSound.oscillator.type = 'sawtooth';
-                gameOverSound = new Tone.Synth().toDestination();
-                gameOverSound.oscillator.type = 'square';
-                buttonClickSound = new Tone.Synth().toDestination();
-                buttonClickSound.oscillator.type = 'sine';
-                levelUpSound = new Tone.Synth().toDestination();
-                levelUpSound.oscillator.type = 'sine';
+             if (!pieceLandedSound) {
+                pieceLandedSound = new Tone.Synth({ oscillator: { type: 'triangle' } }).toDestination();
+                clearLineSound = new Tone.Synth({ oscillator: { type: 'sawtooth' } }).toDestination();
+                gameOverSound = new Tone.PolySynth(Tone.Synth, { oscillator: { type: 'square' } }).toDestination();
+                buttonClickSound = new Tone.Synth({ oscillator: { type: 'sine' } }).toDestination();
+                levelUpSound = new Tone.Synth({ oscillator: { type: 'sine' } }).toDestination();
+                holdSound = new Tone.Synth({ oscillator: { type: 'square' }, volume: -10 }).toDestination(); // Quieter hold sound
+                hardDropSound = new Tone.NoiseSynth({ noise: { type: 'white' }, envelope: { attack: 0.001, decay: 0.05, sustain: 0, release: 0.05 }, volume: -5 }).toDestination();
             }
         }
-
-        /** Plays a sound effect if sound is enabled. */
         function playSound(type) {
             if (!soundEnabled || !Tone.context.state || Tone.context.state !== 'running') return;
-            if (!pieceLandedSound) initializeSounds();
+            if (!pieceLandedSound) initializeSounds(); // Ensure sounds are initialized
             try {
+                const now = Tone.now();
                 switch (type) {
-                    case 'pieceLanded': pieceLandedSound?.triggerAttackRelease('C5', '8n', Tone.now()); break;
-                    case 'clearLine': clearLineSound?.triggerAttackRelease('G4', '4n', Tone.now()); break;
-                    case 'gameOver':
-                        const polySynth = new Tone.PolySynth(Tone.Synth).toDestination();
-                        polySynth.triggerAttackRelease(["C2", "E2", "G2", "Bb2"], "2n", Tone.now());
-                        break;
-                    case 'buttonClick': buttonClickSound?.triggerAttackRelease('C6', '16n', Tone.now()); break;
-                    case 'levelUp': levelUpSound?.triggerAttackRelease('C6', '8n', Tone.now()); break;
+                    case 'pieceLanded': pieceLandedSound?.triggerAttackRelease('C4', '16n', now); break; // Shorter landing sound
+                    case 'clearLine': clearLineSound?.triggerAttackRelease('G5', '8n', now); break;   // Higher pitch clear
+                    case 'gameOver': gameOverSound?.triggerAttackRelease(["C2", "E2", "G2"], "1n", now); break; // Simpler game over chord
+                    case 'buttonClick': buttonClickSound?.triggerAttackRelease('C6', '16n', now); break;
+                    case 'levelUp': levelUpSound?.triggerAttackRelease('C6', '8n', now + 0.1); levelUpSound?.triggerAttackRelease('G6', '8n', now + 0.2); break; // Level up flourish
+                    case 'hold': holdSound?.triggerAttackRelease('A4', '16n', now); break;
+                    case 'hardDrop': hardDropSound?.triggerAttackRelease(now); break;
                 }
             } catch (error) { console.error("Error playing sound:", error); }
         }
@@ -475,45 +459,139 @@
         // --- Grid and Drawing Functions ---
         function createEmptyGrid() { return Array.from({ length: GRID_HEIGHT }, () => Array(GRID_WIDTH).fill(0)); }
         function randomInteger(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-        function spawnTetromino() {
-            const shapeIndex = randomInteger(0, tetrominoShapes.length - 1);
-            const shape = tetrominoShapes[shapeIndex];
-            const color = tetrominoColors[shapeIndex];
-            const x = Math.floor(GRID_WIDTH / 2) - Math.ceil(shape[0].length / 2);
-            const y = 0;
-            return isTetrominoAtValidPosition(shape, x, y) ? { shape, color, x, y } : null;
+
+        /** Generates data for a random tetromino (shape, color). */
+        function generateRandomTetrominoData() {
+            const index = randomInteger(0, tetrominoShapes.length - 1);
+            return { ...tetrominoShapes[index] }; // Return a copy
         }
-        function drawGridSquare(x, y, color) {
+
+        /** Sets the next tetromino in the queue. */
+        function setupNextTetromino() {
+             nextTetromino = generateRandomTetrominoData();
+             drawNextPiece(); // Update the preview
+        }
+
+        /** Moves the next tetromino to current, generates a new next, resets position and hold status. */
+        function setNewTetromino() {
+            if (!nextTetromino) setupNextTetromino(); // Ensure there's a next piece if starting fresh
+
+            currentTetromino = {
+                ...nextTetromino,
+                x: Math.floor(GRID_WIDTH / 2) - Math.ceil(nextTetromino.shape[0].length / 2),
+                y: 0 // Start at the very top
+            };
+
+            setupNextTetromino(); // Generate the *next* piece
+            canHold = true; // Allow holding this new piece
+
+            // Check for game over condition immediately upon spawning
+            if (!isTetrominoAtValidPosition(currentTetromino.shape, currentTetromino.x, currentTetromino.y)) {
+                // Piece spawned overlapping locked pieces - Game Over
+                currentTetromino = null; // Stop drawing the invalid piece
+                gameOver();
+                return false; // Indicate spawn failure
+            }
+            return true; // Indicate spawn success
+        }
+
+        /** Draws a single square on a given canvas context. */
+         function drawGridSquare(ctx, x, y, size, color) {
             ctx.fillStyle = color;
-            ctx.fillRect(x * gridSize, y * gridSize, gridSize, gridSize);
-            ctx.strokeStyle = '#374151';
-            ctx.lineWidth = 1;
-            ctx.strokeRect(x * gridSize + 0.5, y * gridSize + 0.5, gridSize - 1, gridSize - 1);
+            ctx.fillRect(x * size, y * size, size, size);
+            // Add a subtle inner bevel effect
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.15)'; // Lighter shade
+            ctx.fillRect(x * size + size * 0.1, y * size + size * 0.1, size * 0.8, size * 0.8);
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.15)'; // Darker shade for bottom/right
+            ctx.beginPath();
+            ctx.moveTo((x + 1) * size, y * size);
+            ctx.lineTo(x * size, (y + 1) * size);
+            ctx.lineTo((x + 1) * size, (y + 1) * size);
+            ctx.closePath();
+            ctx.fill();
+
+            // Optional outline
+            // ctx.strokeStyle = '#374151'; // Or a darker shade of the block color
+            // ctx.lineWidth = 1;
+            // ctx.strokeRect(x * size + 0.5, y * size + 0.5, size - 1, size - 1);
         }
+
+
+        /** Draws the main game grid. */
         function drawGameGrid() {
+            // Draw background first
+            mainCtx.fillStyle = '#1f2937';
+            mainCtx.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
+            // Draw locked pieces
             gameGrid.forEach((row, rowIndex) => {
                 row.forEach((cell, cellIndex) => {
-                    if (cell) { drawGridSquare(cellIndex, rowIndex, cell); }
-                    else {
-                        ctx.fillStyle = '#1f2937';
-                        ctx.fillRect(cellIndex * gridSize, rowIndex * gridSize, gridSize, gridSize);
+                    if (cell) {
+                        drawGridSquare(mainCtx, cellIndex, rowIndex, mainGridSize, cell);
                     }
                 });
             });
         }
-        function drawTetromino() {
+
+        /** Draws the currently falling tetromino. */
+        function drawCurrentTetromino() {
             if (!currentTetromino) return;
             const { shape, color, x, y } = currentTetromino;
             shape.forEach((row, rowIndex) => {
                 row.forEach((cell, cellIndex) => {
-                    if (cell) { drawGridSquare(x + cellIndex, y + rowIndex, color); }
+                    if (cell) {
+                        drawGridSquare(mainCtx, x + cellIndex, y + rowIndex, mainGridSize, color);
+                    }
                 });
             });
         }
+
+        /** Draws a tetromino piece on a side canvas (Next or Hold). */
+         function drawPieceOnSideCanvas(ctx, canvas, pieceData) {
+            if (!pieceData) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                return;
+            }
+
+            const { shape, color } = pieceData;
+            const blockSize = Math.min(canvas.width / SIDE_CANVAS_GRID_SIZE, canvas.height / SIDE_CANVAS_GRID_SIZE);
+            const shapeWidth = shape[0].length;
+            const shapeHeight = shape.length;
+            // Calculate offsets to center the piece
+            const offsetX = (canvas.width - shapeWidth * blockSize) / 2;
+            const offsetY = (canvas.height - shapeHeight * blockSize) / 2;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear previous drawing
+
+            shape.forEach((row, rowIndex) => {
+                row.forEach((cell, cellIndex) => {
+                    if (cell) {
+                        // Use a simpler square drawing for side panels, or the same one
+                        // drawGridSquare(ctx, cellIndex, rowIndex, blockSize, color); // This would draw relative to 0,0
+                         ctx.fillStyle = color;
+                         ctx.fillRect(offsetX + cellIndex * blockSize, offsetY + rowIndex * blockSize, blockSize - 1, blockSize - 1); // Add -1 for grid lines effect
+                    }
+                });
+            });
+        }
+
+
+        /** Draws the next tetromino preview. */
+        function drawNextPiece() {
+           drawPieceOnSideCanvas(nextCtx, nextCanvas, nextTetromino);
+        }
+
+        /** Draws the held tetromino preview. */
+        function drawHeldPiece() {
+           drawPieceOnSideCanvas(holdCtx, holdCanvas, heldTetromino);
+        }
+
+        /** Main draw function, orchestrates all drawing. */
         function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Clear main canvas (or rely on drawGameGrid to fill background)
+            // mainCtx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
             drawGameGrid();
-            drawTetromino();
+            drawCurrentTetromino();
+            // Side panels are updated when pieces change (setNewTetromino, holdPiece, setupNextTetromino)
         }
 
         // --- Game Logic Functions ---
@@ -523,6 +601,7 @@
                     if (shape[row][col]) {
                         const x = newX + col;
                         const y = newY + row;
+                        // Check boundaries (allow y<0 for spawning, but check grid collision only if y>=0)
                         if (x < 0 || x >= GRID_WIDTH || y >= GRID_HEIGHT || (y >= 0 && gameGrid[y]?.[x])) {
                             return false;
                         }
@@ -531,94 +610,94 @@
             }
             return true;
         }
+
+        /** Attempts to move the tetromino down by one step. Locks if it fails. */
         function moveTetrominoDown() {
             if (isPaused || isGameOver || !currentTetromino) return false;
+
             if (isTetrominoAtValidPosition(currentTetromino.shape, currentTetromino.x, currentTetromino.y + 1)) {
                 currentTetromino.y++;
+                dropTimer = 0; // Reset timer only on successful move
                 return true;
             } else {
+                // Cannot move down, lock it
                 lockTetromino();
                 clearLines();
-                currentTetromino = spawnTetromino();
-                if (!currentTetromino) { gameOver(); }
-                else { dropInterval = gameSpeed; isFastDropping = false; }
+                if (!setNewTetromino()) {
+                    // Game Over occurred during setNewTetromino
+                } else {
+                    // Reset drop interval based on current speed (might have changed due to level up)
+                    dropInterval = gameSpeed;
+                    isSoftDropping = false; // Stop soft drop on lock
+                }
                 return false;
             }
         }
         function moveTetrominoLeft() {
             if (isPaused || isGameOver || !currentTetromino) return;
-            if (isTetrominoAtValidPosition(currentTetromino.shape, currentTetromino.x - 1, currentTetromino.y)) { currentTetromino.x--; }
+            if (isTetrominoAtValidPosition(currentTetromino.shape, currentTetromino.x - 1, currentTetromino.y)) {
+                currentTetromino.x--;
+                dropTimer = 0; // Resetting timer on horizontal move feels more responsive
+            }
         }
         function moveTetrominoRight() {
             if (isPaused || isGameOver || !currentTetromino) return;
-            if (isTetrominoAtValidPosition(currentTetromino.shape, currentTetromino.x + 1, currentTetromino.y)) { currentTetromino.x++; }
+            if (isTetrominoAtValidPosition(currentTetromino.shape, currentTetromino.x + 1, currentTetromino.y)) {
+                currentTetromino.x++;
+                dropTimer = 0; // Resetting timer on horizontal move
+            }
         }
 
-        /**
-         * Rotates the tetromino if possible, attempting basic wall kicks.
-         * @param {string} direction - 'clockwise' or 'counterClockwise'.
-         */
+         /** Rotates the tetromino, attempting basic wall kicks. */
         function rotateTetromino(direction = 'clockwise') {
-            if (isPaused || isGameOver || !currentTetromino) return;
+            if (isPaused || isGameOver || !currentTetromino || currentTetromino.name === 'O') return; // Cannot rotate O piece
 
+            const originalShape = currentTetromino.shape;
             const rotatedShape = (direction === 'clockwise')
-                ? rotateShapeClockwise(currentTetromino.shape)
-                : rotateShapeCounterClockwise(currentTetromino.shape);
+                ? rotateShapeClockwise(originalShape)
+                : rotateShapeCounterClockwise(originalShape);
 
-            let potentialX = currentTetromino.x;
-            // Try original position first
-            if (isTetrominoAtValidPosition(rotatedShape, potentialX, currentTetromino.y)) {
+            // Test offsets (Basic SRS-like kicks for non-I pieces, includes 0 offset)
+            const testOffsets = [-1, 1, -2, 2]; // Offsets to test: Move left/right by 1 or 2
+
+            // 1. Try original position
+            if (isTetrominoAtValidPosition(rotatedShape, currentTetromino.x, currentTetromino.y)) {
                  currentTetromino.shape = rotatedShape;
-                 currentTetromino.x = potentialX;
-                 return; // Rotation successful
-            }
-            // Basic Wall Kick: Try moving right then left
-            if (isTetrominoAtValidPosition(rotatedShape, potentialX + 1, currentTetromino.y)) {
-                 potentialX++;
-            } else if (isTetrominoAtValidPosition(rotatedShape, potentialX - 1, currentTetromino.y)) {
-                 potentialX--;
-            }
-             // Try moving right twice / left twice (for I piece mainly)
-            else if (isTetrominoAtValidPosition(rotatedShape, potentialX + 2, currentTetromino.y)) {
-                 potentialX += 2;
-            } else if (isTetrominoAtValidPosition(rotatedShape, potentialX - 2, currentTetromino.y)) {
-                 potentialX -= 2;
+                 return;
             }
 
-            // Apply rotation if a valid position was found after kicking
-            if (isTetrominoAtValidPosition(rotatedShape, potentialX, currentTetromino.y)) {
-                currentTetromino.shape = rotatedShape;
-                currentTetromino.x = potentialX;
-            }
+            // 2. Try wall kicks
+            for (const offsetX of testOffsets) {
+                 if (isTetrominoAtValidPosition(rotatedShape, currentTetromino.x + offsetX, currentTetromino.y)) {
+                     currentTetromino.shape = rotatedShape;
+                     currentTetromino.x += offsetX;
+                     return;
+                 }
+             }
+
+             // (Optional: Add floor kicks if needed - test moving up by 1 with offsets)
+             // for (const offsetX of [0, ...testOffsets]) {
+             //     if (isTetrominoAtValidPosition(rotatedShape, currentTetromino.x + offsetX, currentTetromino.y - 1)) {
+             //          currentTetromino.shape = rotatedShape;
+             //          currentTetromino.x += offsetX;
+             //          currentTetromino.y -=1;
+             //          return;
+             //     }
+             // }
         }
 
-        /** Rotates a shape matrix 90 degrees clockwise. */
-        function rotateShapeClockwise(shape) {
-            const rows = shape.length;
-            const cols = shape[0].length;
+        function rotateShapeClockwise(shape) { /* ... unchanged ... */
+            const rows = shape.length; const cols = shape[0].length;
             const rotated = Array.from({ length: cols }, () => Array(rows).fill(0));
-            for (let y = 0; y < rows; y++) {
-                for (let x = 0; x < cols; x++) {
-                    rotated[x][rows - 1 - y] = shape[y][x];
-                }
-            }
-            return rotated;
+            for (let y = 0; y < rows; y++) { for (let x = 0; x < cols; x++) { rotated[x][rows - 1 - y] = shape[y][x]; } } return rotated;
         }
-
-        /** Rotates a shape matrix 90 degrees counter-clockwise. */
-        function rotateShapeCounterClockwise(shape) {
-            const rows = shape.length;
-            const cols = shape[0].length;
+        function rotateShapeCounterClockwise(shape) { /* ... unchanged ... */
+            const rows = shape.length; const cols = shape[0].length;
             const rotated = Array.from({ length: cols }, () => Array(rows).fill(0));
-            for (let y = 0; y < rows; y++) {
-                for (let x = 0; x < cols; x++) {
-                     rotated[cols - 1 - x][y] = shape[y][x];
-                }
-            }
-            return rotated;
+            for (let y = 0; y < rows; y++) { for (let x = 0; x < cols; x++) { rotated[cols - 1 - x][y] = shape[y][x]; } } return rotated;
         }
 
-
+        /** Locks the current tetromino onto the grid. */
         function lockTetromino() {
             if (!currentTetromino) return;
             playSound('pieceLanded');
@@ -627,231 +706,441 @@
                     if (cell) {
                         const gridY = currentTetromino.y + rowIndex;
                         const gridX = currentTetromino.x + cellIndex;
+                        // Important: Only lock pieces within the visible grid bounds
                         if (gridY >= 0 && gridY < GRID_HEIGHT && gridX >= 0 && gridX < GRID_WIDTH) {
                              gameGrid[gridY][gridX] = currentTetromino.color;
                         }
                     }
                 });
             });
+             currentTetromino = null; // Set current to null after locking
         }
+
+        /** Clears completed lines and updates score/level. */
         function clearLines() {
             let linesCleared = 0;
             for (let y = GRID_HEIGHT - 1; y >= 0; ) {
-                if (gameGrid[y].every(cell => cell)) {
+                if (gameGrid[y].every(cell => cell)) { // Found a full line
                     linesCleared++;
+                    // Remove the line and add a new empty line at the top
                     gameGrid.splice(y, 1);
                     gameGrid.unshift(Array(GRID_WIDTH).fill(0));
-                } else { y--; }
+                    // Don't decrement y, check the new line that shifted down
+                } else {
+                    y--; // Move to the next line up
+                }
             }
             if (linesCleared > 0) {
                 updateScore(linesCleared);
                 playSound('clearLine');
-                const levelThreshold = level * 500;
-                if (score >= levelThreshold) {
+                // Check for level up
+                const levelThreshold = level * 5; // Level up every 5 lines cleared (adjust as desired)
+                if (Math.floor(score / (100 * levelThreshold)) >= level) { // Example threshold logic based on score
                     level++;
-                    let baseSpeed;
+                    // Recalculate game speed based on new level and difficulty
                      switch(difficulty){
                        case 'easy': baseSpeed = 1000; break;
                        case 'medium': baseSpeed = 750; break;
                        case 'hard': baseSpeed = 500; break;
                        default: baseSpeed = 750;
                     }
-                    gameSpeed = Math.max(100, baseSpeed - (level -1) * 50);
+                    gameSpeed = Math.max(100, baseSpeed - (level - 1) * 40); // Speed increases faster now
                     dropInterval = gameSpeed;
-                    scoreLevelDisplay.textContent = `Score: ${score} | Level: ${level}`;
+                    updateScoreLevelDisplay(); // Update display text
                     playSound('levelUp');
+                    showMessage(`Level Up! Reached Level ${level}`);
                 }
             }
         }
+
+        /** Updates the score based on lines cleared. */
         function updateScore(linesCleared) {
-            const points = [0, 100, 300, 500, 800];
+            // Standard Tetris scoring (adjust points as desired)
+            const points = [0, 100, 300, 500, 800]; // Points for 0, 1, 2, 3, 4 lines
             score += (points[linesCleared] || 0) * level;
-            scoreLevelDisplay.textContent = `Score: ${score} | Level: ${level}`;
+            updateScoreLevelDisplay();
         }
-        function showMessage(message) {
-            messageBox.textContent = message;
-            messageBox.classList.add('show-message');
-            setTimeout(() => { messageBox.classList.remove('show-message'); }, 3000);
+
+        /** Updates the Score and Level text display. */
+        function updateScoreLevelDisplay() {
+            // Use innerHTML to allow <br> for line break if needed
+             scoreLevelContainer.innerHTML = `Score: <span>${score}</span><br>Level: <span>${level}</span>`;
         }
+
+        /** Performs a hard drop - instantly moves piece down and locks it. */
+        function hardDrop() {
+             if (isPaused || isGameOver || !currentTetromino) return;
+
+             let potentialY = currentTetromino.y;
+             // Find the lowest possible position
+             while (isTetrominoAtValidPosition(currentTetromino.shape, currentTetromino.x, potentialY + 1)) {
+                 potentialY++;
+             }
+
+             // Only drop if it actually moved down
+             if (potentialY > currentTetromino.y) {
+                 // Optional: Add points for hard drop based on distance?
+                 // score += (potentialY - currentTetromino.y);
+                 currentTetromino.y = potentialY;
+                 playSound('hardDrop');
+             }
+
+             // Lock, clear, and spawn next immediately after hard drop
+             lockTetromino();
+             clearLines();
+             if (!setNewTetromino()) {
+                 // Game over handled by setNewTetromino
+             }
+             dropTimer = 0; // Reset drop timer for the new piece
+             isSoftDropping = false; // Ensure soft drop is off
+        }
+
+        /** Holds the current piece or swaps with the held piece. */
+        function holdPiece() {
+            if (isPaused || isGameOver || !canHold) return; // Check canHold flag
+
+            playSound('hold');
+            canHold = false; // Prevent holding again until the *next* piece starts falling
+
+            const previouslyHeld = heldTetromino;
+             // Store only the essential data (shape/color), not position
+            heldTetromino = { shape: currentTetromino.shape, color: currentTetromino.color, name: currentTetromino.name };
+            drawHeldPiece(); // Update hold display immediately
+
+            if (previouslyHeld) {
+                // Swap with the previously held piece
+                 currentTetromino = {
+                    ...previouslyHeld,
+                    x: Math.floor(GRID_WIDTH / 2) - Math.ceil(previouslyHeld.shape[0].length / 2),
+                    y: 0
+                 };
+                 // Check if the swapped-in piece can be placed
+                if (!isTetrominoAtValidPosition(currentTetromino.shape, currentTetromino.x, currentTetromino.y)) {
+                    // Cannot place the held piece - Game Over
+                     heldTetromino = previouslyHeld; // Revert hold visually
+                     drawHeldPiece();
+                     currentTetromino = null; // Clear current piece
+                     gameOver();
+                     return;
+                 }
+
+            } else {
+                // First time holding, get the next piece
+                if (!setNewTetromino()) {
+                     // Game over occurred while getting next piece
+                     heldTetromino = null; // Clear hold visually since game is over
+                     drawHeldPiece();
+                     return;
+                 }
+            }
+
+             dropTimer = 0; // Reset drop timer for the new/swapped piece
+             isSoftDropping = false; // Reset soft drop state
+        }
+
+        /** Shows a temporary message at the bottom of the screen. */
+        function showMessage(message) { /* ... unchanged ... */
+            messageBox.textContent = message; messageBox.classList.add('show-message');
+            setTimeout(() => { messageBox.classList.remove('show-message'); }, 2500); // Slightly shorter duration
+        }
+
+        /** Handles the game over state. */
         function gameOver() {
             console.log("Game Over!");
-            isGameOver = true; isPaused = true;
+            isGameOver = true; isPaused = true; // Set both flags
             cancelAnimationFrame(animationFrameId); animationFrameId = null;
             menuTitle.textContent = "Game Over!";
             showMenu(gameOverMenu);
             playSound('gameOver');
-            pauseResumeButton.disabled = true;
+            pauseResumeButton.disabled = true; // Disable pause/resume button
         }
 
         // --- Game State Control ---
         function startGame() {
             if (Tone.context.state !== 'running') { Tone.start().then(initializeSounds); }
             else { initializeSounds(); }
+
             gameGrid = createEmptyGrid(); score = 0; level = 1;
              switch(difficulty){
-               case 'easy': gameSpeed = 1000; break;
-               case 'medium': gameSpeed = 750; break;
-               case 'hard': gameSpeed = 500; break;
-               default: gameSpeed = 750;
+               case 'easy': baseSpeed = 1000; break;
+               case 'medium': baseSpeed = 750; break;
+               case 'hard': baseSpeed = 500; break;
+               default: baseSpeed = 750;
             }
+            gameSpeed = baseSpeed;
             dropInterval = gameSpeed; dropTimer = 0;
-            isFastDropping = false; isGameOver = false; isPaused = false;
-            scoreLevelDisplay.textContent = `Score: ${score} | Level: ${level}`;
-            currentTetromino = spawnTetromino();
-            if (!currentTetromino) { gameOver(); return; }
+            isSoftDropping = false; isGameOver = false; isPaused = false;
+            heldTetromino = null; canHold = true; // Reset hold state
+            currentTetromino = null; // Ensure no piece initially
+            nextTetromino = null; // Ensure next is reset
+
+            updateScoreLevelDisplay(); // Update display text
+            drawHeldPiece(); // Clear hold display
+            setupNextTetromino(); // Generate the very first "next" piece
+            if (!setNewTetromino()) { return; } // Generate the first "current" piece and handle immediate game over
+
             hideMenu();
             pauseResumeButton.textContent = 'Pause';
             pauseResumeButton.disabled = false;
+            settingsButton.disabled = false; // Re-enable settings button if it was disabled
+
             lastTime = performance.now();
             if (animationFrameId) cancelAnimationFrame(animationFrameId);
             animationFrameId = requestAnimationFrame(gameLoop);
         }
-        function pauseGame() {
-            if (isGameOver || isPaused) return;
-            isPaused = true;
+        function pauseGame() { /* ... unchanged ... */
+            if (isGameOver || isPaused) return; isPaused = true;
             cancelAnimationFrame(animationFrameId); animationFrameId = null;
-            pauseResumeButton.textContent = 'Resume';
-            showMenu(pauseMenu);
+            pauseResumeButton.textContent = 'Resume'; showMenu(pauseMenu);
         }
-        function resumeGame() {
-            if (isGameOver || !isPaused) return;
-            isPaused = false;
-            hideMenu();
-            pauseResumeButton.textContent = 'Pause';
-            lastTime = performance.now();
-             if (!animationFrameId) { animationFrameId = requestAnimationFrame(gameLoop); }
+        function resumeGame() { /* ... unchanged ... */
+            if (isGameOver || !isPaused) return; isPaused = false;
+            // Ensure audio context is running after potential user interaction pause
+            if (Tone.context.state === 'suspended') { Tone.start(); }
+            hideMenu(); pauseResumeButton.textContent = 'Pause';
+            lastTime = performance.now(); // Reset timer to avoid large jump
+            if (!animationFrameId) { animationFrameId = requestAnimationFrame(gameLoop); }
         }
+
+        /** Main game loop. */
         function gameLoop(currentTime) {
-            if (isPaused || isGameOver) { return; }
+            if (isPaused || isGameOver) { return; } // Exit if paused or game over
+
             const deltaTime = currentTime - lastTime;
             lastTime = currentTime;
+
             dropTimer += deltaTime;
-            const currentDropInterval = isFastDropping ? FAST_DROP_SPEED : dropInterval;
-            if (dropTimer >= currentDropInterval) {
-                moveTetrominoDown();
-                dropTimer = 0;
+
+            // Determine the interval for this frame (faster if soft dropping)
+            const currentDropInterval = isSoftDropping ? (dropInterval / SOFT_DROP_MULTIPLIER) : dropInterval;
+
+            // Use a while loop for soft drop to handle multiple steps per frame if needed
+            while (dropTimer >= currentDropInterval) {
+                if (!moveTetrominoDown()) { // Attempt to move down, breaks loop if piece locks
+                    break;
+                }
+                 dropTimer -= currentDropInterval; // Consume the time for one step
+                 // If soft dropping, we might need to immediately check again
+                 if (!isSoftDropping) break;
             }
-            draw();
+
+            draw(); // Draw the updated state
+
             animationFrameId = requestAnimationFrame(gameLoop);
         }
 
         // --- Menu Handling ---
-        function showMenu(menuToShow) {
-            menuContainer.style.display = 'flex';
+        function showMenu(menuToShow) { /* ... mostly unchanged ... */
+             menuContainer.style.display = 'flex';
             [mainMenu, settingsMenu, pauseMenu, gameOverMenu, howToPlayMenu].forEach(m => m.style.display = 'none');
             menuToShow.style.display = 'block';
-             if (menuToShow === pauseMenu || menuToShow === gameOverMenu || menuToShow === settingsMenu || menuToShow === howToPlayMenu || menuToShow === mainMenu && currentTetromino !== null) {
-                if (!isPaused && !isGameOver) {
-                    isPaused = true;
-                    cancelAnimationFrame(animationFrameId); animationFrameId = null;
-                    pauseResumeButton.textContent = "Resume";
-                }
+
+            // Auto-pause logic when opening menus during active gameplay
+             if (menuToShow !== pauseMenu && !isPaused && !isGameOver && currentTetromino !== null) {
+                 // If opening main menu, settings, etc. during gameplay, pause it
+                  isPaused = true; // Explicitly pause
+                  cancelAnimationFrame(animationFrameId); animationFrameId = null;
+                  pauseResumeButton.textContent = "Resume";
+                  pauseResumeButton.disabled = false; // Ensure resume is possible
+                  if (menuToShow === mainMenu) menuTitle.textContent = "Menu";
+                  else if (menuToShow === settingsMenu) menuTitle.textContent = "Settings";
+                  else if (menuToShow === howToPlayMenu) menuTitle.textContent = "How to Play";
+            } else if (isGameOver && menuToShow !== gameOverMenu) {
+                 // If game is over, ensure only game over menu options are relevant
+                 menuTitle.textContent = "Game Over!";
+                 showMenu(gameOverMenu); // Force show game over menu
             }
         }
-        function hideMenu() { menuContainer.style.display = 'none'; }
+        function hideMenu() { /* ... unchanged ... */
+            menuContainer.style.display = 'none';
+        }
 
         // --- Event Handlers ---
-        function handlePauseResumeClick() {
+        function handlePauseResumeClick() { /* ... unchanged ... */
           playSound('buttonClick'); if (isGameOver) return;
           if (isPaused) { resumeGame(); } else { pauseGame(); }
         }
-        function handleSettingsClick() {
+        function handleSettingsClick() { /* ... unchanged ... */
             playSound('buttonClick'); menuTitle.textContent = "Settings"; showMenu(settingsMenu);
         }
-        function handleMenuButtonClick() {
+        function handleMenuButtonClick() { /* ... slight change for clarity ... */
           playSound('buttonClick');
-           if (!isGameOver && !isPaused && currentTetromino) { pauseGame(); menuTitle.textContent = "Paused"; }
-           else if(isGameOver){ menuTitle.textContent = "Game Over!"; showMenu(gameOverMenu); }
-           else { menuTitle.textContent = "Menu"; showMenu(mainMenu); }
+           if (isGameOver) {
+               menuTitle.textContent = "Game Over!"; showMenu(gameOverMenu);
+           } else if (!isPaused && currentTetromino) { // If game is active
+                pauseGame(); // Pause first
+                menuTitle.textContent = "Paused"; // Show paused title
+                showMenu(pauseMenu);      // Then show pause menu
+           } else if (isPaused && !isGameOver){ // If paused but not game over
+                 menuTitle.textContent = "Paused"; showMenu(pauseMenu); // Show pause menu directly
+           } else { // If at initial state (no game running)
+                menuTitle.textContent = "Menu"; showMenu(mainMenu);
+           }
         }
 
-        /** Handles keydown events (Updated for z/x rotation). */
+        /** Handles keydown events. */
         function handleKeyDown(event) {
-            if (isPaused || isGameOver) {
-                if (isPaused && !isGameOver && (event.key === 'p' || event.key === 'P')) { resumeGame(); }
-                return;
+            // Menu navigation or resume/start takes priority if menu is open
+            if (menuContainer.style.display === 'flex') {
+                 if (event.key === 'Escape') {
+                     // Find the visible menu and trigger its back button or resume action
+                     if (pauseMenu.style.display === 'block') resumeGame();
+                     else if (settingsMenu.style.display === 'block' || howToPlayMenu.style.display === 'block') {
+                         // Find the back button and simulate click
+                         const backButton = document.querySelector('#settings-menu li[data-action="backToMainMenu"], #how-to-play-menu li[data-action="backToMainMenu"]');
+                         backButton?.click();
+                     } else if (mainMenu.style.display === 'block' && !isGameOver && currentTetromino) {
+                         // If main menu is open during a pausable game state, Escape could resume
+                         // resumeGame(); // Or just close menu? Let's stick to explicit actions.
+                     }
+                 }
+                 return; // Don't process game keys if a menu is open
             }
+
+             // Handle pause/resume globally if game is running or paused
+             if (!isGameOver && (event.key === 'p' || event.key === 'P')) {
+                 handlePauseResumeClick(); // Use the button handler logic
+                 event.preventDefault();
+                 return;
+            }
+
+            if (isPaused || isGameOver) return; // Don't process other game keys if paused/game over
+
             // Game controls
             switch (event.key) {
                 case 'ArrowLeft': moveTetrominoLeft(); break;
                 case 'ArrowRight': moveTetrominoRight(); break;
                 case 'ArrowDown':
-                    if (!isFastDropping) { isFastDropping = true; dropTimer = dropInterval; }
+                    if (!isSoftDropping) {
+                        isSoftDropping = true;
+                        dropTimer = dropInterval; // Trigger immediate check in game loop
+                    }
                     break;
-                case 'z': // Clockwise rotation
+                case ' ': // Space bar for Hard Drop
+                    hardDrop();
+                    break;
+                case 'z': // Rotate Counter-Clockwise (like Tetris standard)
                 case 'Z':
-                    rotateTetromino('clockwise');
+                    rotateTetromino('counterClockwise');
                     break;
-                case 'x': // Counter-clockwise rotation
+                case 'x': // Rotate Clockwise (like Tetris standard)
                 case 'X':
-                     rotateTetromino('counterClockwise');
+                case 'ArrowUp': // Also allow Up Arrow for clockwise rotation
+                     rotateTetromino('clockwise');
                     break;
-                case 'p':
-                case 'P':
-                    pauseGame();
+                case 'c': // Hold Piece
+                case 'C':
+                    holdPiece();
                     break;
+                // P/p handled above
             }
-             // Prevent default browser action for game keys
-            if (['ArrowLeft', 'ArrowRight', 'ArrowDown', 'z', 'Z', 'x', 'X'].includes(event.key)) {
+
+             // Prevent default browser action for game keys to avoid scrolling etc.
+            if (['ArrowLeft', 'ArrowRight', 'ArrowDown', 'ArrowUp', ' ', 'z', 'Z', 'x', 'X', 'c', 'C'].includes(event.key)) {
                 event.preventDefault();
             }
         }
 
+        /** Handles keyup events (mainly for stopping soft drop). */
         function handleKeyUp(event) {
-            if (event.key === 'ArrowDown') { isFastDropping = false; dropTimer = 0; }
+            if (event.key === 'ArrowDown') {
+                 isSoftDropping = false;
+                 // Don't reset dropTimer here, let the natural fall continue
+            }
         }
-        function handleMenuItemClick(event) {
+
+        /** Handles clicks within the menu container. */
+        function handleMenuItemClick(event) { /* ... mostly unchanged, check restart logic ... */
             if (event.target.tagName !== 'LI' || !event.target.dataset.action) { return; }
             playSound('buttonClick');
             const action = event.target.dataset.action;
             switch (action) {
                 case 'startGame': startGame(); break;
                 case 'resume': resumeGame(); break;
-                case 'restart': startGame(); break;
+                case 'restart': startGame(); break; // Restart should just call startGame
                 case 'settings': menuTitle.textContent = "Settings"; showMenu(settingsMenu); break;
                 case 'howToPlay': menuTitle.textContent = "How to Play"; showMenu(howToPlayMenu); break;
                 case 'mainMenu':
-                    menuTitle.textContent = "Menu"; showMenu(mainMenu);
-                    if (isGameOver) { pauseResumeButton.disabled = true; }
-                    else if (currentTetromino === null) { pauseResumeButton.disabled = true; }
-                    else { pauseResumeButton.disabled = false; pauseResumeButton.textContent = "Resume"; }
+                     menuTitle.textContent = "Menu";
+                     showMenu(mainMenu);
+                     // Update button states based on whether game was active/over
+                     if (isGameOver) {
+                         pauseResumeButton.disabled = true;
+                         settingsButton.disabled = true; // Maybe disable settings too on game over screen
+                     } else if (currentTetromino !== null || isPaused) { // If game was active or paused
+                         pauseResumeButton.disabled = false;
+                         pauseResumeButton.textContent = "Resume";
+                         settingsButton.disabled = false;
+                     } else { // If no game was running
+                         pauseResumeButton.disabled = true;
+                         settingsButton.disabled = false;
+                     }
                     break;
-                case 'backToMainMenu': menuTitle.textContent = "Menu"; showMenu(mainMenu); break;
-                case 'difficulty':
+                 case 'backToMainMenu':
+                    // Determine context: if paused, show pause menu? If settings, show main?
+                    // Let's always go back to the main menu for simplicity from submenus for now.
+                    menuTitle.textContent = "Menu";
+                    showMenu(mainMenu);
+                    break;
+                case 'difficulty': /* ... unchanged ... */
                     const difficulties = ['easy', 'medium', 'hard'];
                     const currentDifficultyIndex = difficulties.indexOf(difficulty);
                     difficulty = difficulties[(currentDifficultyIndex + 1) % difficulties.length];
                     event.target.querySelector('span').textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
                     showMessage(`Difficulty set to ${difficulty}. Takes effect on restart.`);
                     break;
-                 case 'sound':
+                 case 'sound': /* ... unchanged ... */
                     soundEnabled = !soundEnabled;
                     event.target.querySelector('span').textContent = soundEnabled ? 'On' : 'Off';
-                    if (soundEnabled) playSound('buttonClick');
+                    if (soundEnabled && Tone.context.state === 'running') playSound('buttonClick');
+                    else if (!soundEnabled && Tone.context.state === 'running') {
+                        // Optional: Stop any looping sounds if they exist
+                    } else if (soundEnabled && Tone.context.state !== 'running') {
+                        // Try starting audio context if enabling sound
+                        Tone.start().then(() => { playSound('buttonClick'); }).catch(e => console.warn("Audio context couldn't start."));
+                    }
                     break;
             }
         }
+
+        /** Resizes all canvases based on container size. */
         function resizeCanvas() {
-            const containerWidth = canvas.clientWidth;
-            gridSize = Math.floor(containerWidth / GRID_WIDTH);
-            canvas.width = GRID_WIDTH * gridSize;
-            canvas.height = GRID_HEIGHT * gridSize;
-            if (!isPaused || currentTetromino) { draw(); }
-            else { ctx.clearRect(0, 0, canvas.width, canvas.height); drawGameGrid(); }
+             // Main Canvas
+             const centerContentWidth = mainCanvas.parentElement.clientWidth;
+             mainGridSize = Math.floor(centerContentWidth / GRID_WIDTH);
+             mainCanvas.width = GRID_WIDTH * mainGridSize;
+             mainCanvas.height = GRID_HEIGHT * mainGridSize;
+
+             // Side Canvases (Next/Hold)
+            // Let CSS handle the aspect ratio. Set JS width/height for render resolution.
+             nextCanvas.width = nextCanvas.clientWidth;
+             nextCanvas.height = nextCanvas.clientHeight;
+             holdCanvas.width = holdCanvas.clientWidth;
+             holdCanvas.height = holdCanvas.clientHeight;
+
+             // Redraw everything after resize
+             draw(); // Draw game state
+             drawNextPiece(); // Redraw previews
+             drawHeldPiece();
         }
 
         // --- Initialization ---
         window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        // Initial setup
+        updateScoreLevelDisplay(); // Set initial score/level text
         pauseResumeButton.disabled = true;
+        settingsButton.disabled = false; // Settings accessible initially
+        // Add event listeners
         pauseResumeButton.addEventListener('click', handlePauseResumeClick);
         settingsButton.addEventListener('click', handleSettingsClick);
         menuButton.addEventListener('click', handleMenuButtonClick);
-        menuContainer.addEventListener('click', handleMenuItemClick);
+        menuContainer.addEventListener('click', handleMenuItemClick); // Delegate clicks inside menu
         document.addEventListener('keydown', handleKeyDown);
         document.addEventListener('keyup', handleKeyUp);
+        // Perform initial resize and show menu
+        resizeCanvas(); // Set initial canvas sizes
         menuTitle.textContent = "Menu";
-        showMenu(mainMenu);
+        showMenu(mainMenu); // Start with the main menu visible
 
     </script>
 </body>
