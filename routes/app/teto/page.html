@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetris Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #111827; /* Dark background */
+            color: #f9fafb; /* Light text */
+            font-family: 'Press Start 2P', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+
+        #game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 95%;
+            max-width: 1200px; /* Responsive max width */
+            padding: 1.25rem;
+            border-radius: 0.75rem; /* Rounded corners */
+            /*background-color: #1F2937; !* Darker container background *!*/
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+            box-sizing: border-box;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-size: 2rem; /* Larger heading */
+            color: #6366f1; /* Vibrant purple */
+            text-shadow: 0 0 0.25rem rgba(100, 116, 139, 0.8);
+        }
+        @media (max-width: 400px){
+           h1{
+             font-size: 1.75rem
+           }
+        }
+
+        #score-level {
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            color: #cbd5e0;
+        }
+
+        #canvas {
+          /* background-color: #374151; !* Dark grey canvas background *!*/
+            border: 0.25rem solid #4b5563; /* Darker border */
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 1rem;
+            width: 100%; /* Responsive width */
+            max-width: 320px; /* Max width for the canvas */
+            height: auto;
+            aspect-ratio: 1 / 2;
+        }
+       @media (max-width: 400px){
+          #canvas{
+             max-width: 95%;
+          }
+       }
+
+        .button {
+            padding: 0.75rem 1.5rem;
+            margin: 0.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            background-color: #4caf50; /* Green */
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-family: 'Press Start 2P', monospace;
+        }
+
+        .button:hover {
+            background-color: #45a049; /* Darker green */
+            transform: translateY(-0.125rem); /* Slight lift on hover */
+        }
+        .button.secondary{
+          background-color: #6b7280; /* Gray */
+        }
+       .button.secondary:hover {
+            background-color: #4b5563; /* Darker gray */
+        }
+       .button:disabled {
+            background-color: #9ca3af; /* Lighter gray when disabled */
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #menu-container {
+            position: absolute; /* Overlay the entire screen */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* Dark semi-transparent overlay */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        #menu-content {
+            background-color: #242424; /* Dark menu background */
+            padding: 2rem;
+            border-radius: 0.75rem;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+
+        #menu-content h2 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: #f5f5f5;
+        }
+
+        #menu-content ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 1rem;
+        }
+
+        #menu-content li {
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            color: #d1d5db;
+            cursor: pointer; /* Indicate clickable items */
+            padding: 0.25rem 0;
+            transition: color 0.2s ease;
+        }
+         #menu-content li:hover {
+            color: #ffffff; /* Highlight on hover */
+         }
+
+         #menu-content li span{
+            color: #fff;
+         }
+
+         /* Specific styling for How to Play */
+         #how-to-play-menu li {
+            font-size: 0.9rem;
+            text-align: left;
+            margin-left: 1rem;
+            cursor: default; /* Not clickable */
+            line-height: 1.5; /* Better spacing for instructions */
+         }
+         #how-to-play-menu li:hover {
+            color: #d1d5db; /* No highlight on hover */
+         }
+         #how-to-play-menu li.control-key {
+            font-weight: bold;
+            color: #a5b4fc; /* Light indigo for keys */
+            display: inline-block;
+            width: 6rem; /* Align keys */
+         }
+         #how-to-play-menu li.control-action {
+             color: #f9fafb; /* White for actions */
+         }
+         #how-to-play-menu li.back-button {
+            cursor: pointer;
+            text-align: center;
+            margin-top: 1rem;
+            margin-left: 0; /* Reset margin */
+            font-weight: bold;
+            color: #6366f1; /* Purple for back button */
+         }
+         #how-to-play-menu li.back-button:hover {
+            color: #818cf8; /* Lighter purple on hover */
+         }
+
+
+        #message-box {
+            position: absolute;
+            bottom: 2rem;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .show-message {
+            opacity: 1;
+        }
+       .settings-group {
+          margin-bottom: 1rem;
+          text-align: left;
+          width: 100%;
+       }
+      .settings-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+        color: #cbd5e0;
+      }
+      .settings-group input[type="range"],
+      .settings-group select {
+        width: 100%;
+        padding: 0.5rem;
+        border-radius: 0.375rem;
+        border: 1px solid #4b5563;
+        background-color: #374151;
+        color: #f9fafb;
+        font-size: 0.875rem;
+        box-sizing: border-box;
+      }
+      .settings-group select{
+         appearance: none; /* Remove default arrow */
+         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 011.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd' /%3E%3C/svg%3E"); /* Custom arrow */
+        background-repeat: no-repeat;
+        background-position: right 0.5rem center;
+        background-size: 1rem;
+      }
+      .settings-group select:focus {
+        outline: none;
+        border-color: #6366f1; /* Highlight on focus */
+        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2); /* Focus shadow */
+      }
+      input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        background: transparent;
+        cursor: pointer;
+        width: 100%;
+      }
+      input[type="range"]:focus {
+        outline: none;
+      }
+      input[type="range"]::-webkit-slider-runnable-track {
+        background: #374151;
+        border-radius: 0.5rem;
+        height: 0.5rem;
+        cursor: pointer;
+      }
+       input[type="range"]::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          height: 1.25rem;
+          width: 1.25rem;
+          background: #6366f1;
+          border-radius: 50%;
+          border: 2px solid #fff;
+          margin-top: -0.375rem;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+       input[type="range"]::-webkit-slider-thumb:hover,
+        input[type="range"]::-webkit-slider-thumb:active {
+          transform: scale(1.1);
+        }
+        /* Firefox styles */
+        input[type="range"]::-moz-range-track {
+            background: #374151;
+            border-radius: 0.5rem;
+            height: 0.5rem;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            height: 1.25rem;
+            width: 1.25rem;
+            background: #6366f1;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        input[type="range"]::-moz-range-thumb:hover,
+        input[type="range"]::-moz-range-thumb:active {
+            transform: scale(1.1);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            #game-container {
+                width: 98%;
+            }
+            #menu-content {
+                width: 95%;
+            }
+            .button {
+                font-size: 0.9rem;
+                padding: 0.75rem 1rem;
+            }
+            h1 {
+                font-size: 1.75rem;
+            }
+            #score-level{
+              font-size: 0.875rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .button {
+                font-size: 0.8rem;
+                padding: 0.5rem 1rem;
+            }
+             h1{
+                font-size: 1.5rem;
+             }
+              #score-level{
+                font-size: 0.75rem;
+              }
+            #menu-content {
+                padding: 1.5rem;
+            }
+            #menu-content h2 {
+                font-size: 1.25rem;
+            }
+            #menu-content li {
+                font-size: 0.9rem;
+            }
+            #how-to-play-menu li {
+                font-size: 0.8rem; /* Smaller font for instructions on small screens */
+            }
+            #how-to-play-menu li.control-key {
+                width: 5rem; /* Adjust key width */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Tetris</h1>
+        <p id="score-level">Score: <span>0</span> | Level: <span>1</span></p>
+        <canvas id="canvas"></canvas>
+
+        <button id="pause-resume-button" class="button" disabled>Pause</button>
+        <button id="settings-button" class="button secondary">Settings</button>
+        <button id="menu-button" class="button secondary">Menu</button>
+
+        <div id="message-box"></div>
+
+        <div id="menu-container"> <div id="menu-content">
+                <h2 id="menu-title">Menu</h2>
+                <ul id="main-menu">
+                    <li data-action="startGame">Start Game</li>
+                    <li data-action="howToPlay">How to Play</li>
+                    <li data-action="settings">Settings</li>
+                    </ul>
+                <ul id="how-to-play-menu" style="display: none;">
+                    <li><span class="control-key">Left Arrow:</span> <span class="control-action">Move Left</span></li>
+                    <li><span class="control-key">Right Arrow:</span> <span class="control-action">Move Right</span></li>
+                    <li><span class="control-key">Down Arrow:</span> <span class="control-action">Soft Drop / Fast Drop</span></li>
+                    <li><span class="control-key">Z Key:</span> <span class="control-action">Rotate Clockwise</span></li>
+                    <li><span class="control-key">X Key:</span> <span class="control-action">Rotate Counter-Clockwise</span></li>
+                    <li><span class="control-key">P Key:</span> <span class="control-action">Pause / Resume</span></li>
+                    <li class="back-button" data-action="backToMainMenu">Back</li>
+                </ul>
+                <ul id="settings-menu" style="display: none;">
+                    <li data-action="difficulty">Difficulty: <span>Medium</span></li>
+                    <li data-action="sound">Sound: <span>On</span></li>
+                    <li data-action="backToMainMenu">Back</li> </ul>
+                <ul id="pause-menu" style="display: none;">
+                    <li data-action="resume">Resume</li>
+                    <li data-action="restart">Restart</li>
+                    <li data-action="settings">Settings</li>
+                    <li data-action="mainMenu">Main Menu</li> </ul>
+                <ul id="gameover-menu" style="display: none;">
+                    <li data-action="restart">Restart</li>
+                    <li data-action="mainMenu">Main Menu</li> </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.min.js"></script>
+    <script>
+        // --- DOM Elements ---
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const scoreLevelDisplay = document.getElementById('score-level');
+        const pauseResumeButton = document.getElementById('pause-resume-button');
+        const settingsButton = document.getElementById('settings-button');
+        const menuButton = document.getElementById('menu-button');
+        const menuContainer = document.getElementById('menu-container');
+        const menuContent = document.getElementById('menu-content');
+        const mainMenu = document.getElementById('main-menu');
+        const howToPlayMenu = document.getElementById('how-to-play-menu');
+        const settingsMenu = document.getElementById('settings-menu');
+        const pauseMenu = document.getElementById('pause-menu');
+        const gameOverMenu = document.getElementById('gameover-menu');
+        const menuTitle = document.getElementById('menu-title');
+        const messageBox = document.getElementById('message-box');
+
+        // --- Game Constants ---
+        const GRID_WIDTH = 10;
+        const GRID_HEIGHT = 20;
+        const FAST_DROP_SPEED = 50;
+        const TARGET_FPS = 60;
+        const FRAME_TIME = 1000 / TARGET_FPS;
+
+        // --- Game Variables ---
+        let gridSize = 32;
+        let gameGrid = createEmptyGrid();
+        let currentTetromino = null;
+        let score = 0;
+        let level = 1;
+        let gameSpeed = 750;
+        let dropInterval = gameSpeed;
+        let dropTimer = 0;
+        let isPaused = true;
+        let isGameOver = false;
+        let soundEnabled = true;
+        let difficulty = 'medium';
+        let animationFrameId = null;
+        let lastTime = 0;
+        let isFastDropping = false;
+
+        // --- Tetromino Data ---
+        const tetrominoShapes = [
+            [[1, 1, 1, 1]], // I
+            [[1, 0, 0], [1, 1, 1]], // J
+            [[0, 0, 1], [1, 1, 1]], // L
+            [[1, 1], [1, 1]], // O
+            [[0, 1, 1], [1, 1, 0]], // S
+            [[0, 1, 0], [1, 1, 1]], // T
+            [[1, 1, 0], [0, 1, 1]]  // Z
+        ];
+        const tetrominoColors = ['#00ffff', '#0000ff', '#ffaa00', '#ffff00', '#00ff00', '#aa00ff', '#ff0000'];
+
+        // --- Sound Effects (Tone.js) ---
+        let pieceLandedSound, clearLineSound, gameOverSound, buttonClickSound, levelUpSound;
+        function initializeSounds() {
+            if (!pieceLandedSound) {
+                pieceLandedSound = new Tone.Synth().toDestination();
+                pieceLandedSound.oscillator.type = 'triangle';
+                clearLineSound = new Tone.Synth().toDestination();
+                clearLineSound.oscillator.type = 'sawtooth';
+                gameOverSound = new Tone.Synth().toDestination();
+                gameOverSound.oscillator.type = 'square';
+                buttonClickSound = new Tone.Synth().toDestination();
+                buttonClickSound.oscillator.type = 'sine';
+                levelUpSound = new Tone.Synth().toDestination();
+                levelUpSound.oscillator.type = 'sine';
+            }
+        }
+
+        /** Plays a sound effect if sound is enabled. */
+        function playSound(type) {
+            if (!soundEnabled || !Tone.context.state || Tone.context.state !== 'running') return;
+            if (!pieceLandedSound) initializeSounds();
+            try {
+                switch (type) {
+                    case 'pieceLanded': pieceLandedSound?.triggerAttackRelease('C5', '8n', Tone.now()); break;
+                    case 'clearLine': clearLineSound?.triggerAttackRelease('G4', '4n', Tone.now()); break;
+                    case 'gameOver':
+                        const polySynth = new Tone.PolySynth(Tone.Synth).toDestination();
+                        polySynth.triggerAttackRelease(["C2", "E2", "G2", "Bb2"], "2n", Tone.now());
+                        break;
+                    case 'buttonClick': buttonClickSound?.triggerAttackRelease('C6', '16n', Tone.now()); break;
+                    case 'levelUp': levelUpSound?.triggerAttackRelease('C6', '8n', Tone.now()); break;
+                }
+            } catch (error) { console.error("Error playing sound:", error); }
+        }
+
+        // --- Grid and Drawing Functions ---
+        function createEmptyGrid() { return Array.from({ length: GRID_HEIGHT }, () => Array(GRID_WIDTH).fill(0)); }
+        function randomInteger(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+        function spawnTetromino() {
+            const shapeIndex = randomInteger(0, tetrominoShapes.length - 1);
+            const shape = tetrominoShapes[shapeIndex];
+            const color = tetrominoColors[shapeIndex];
+            const x = Math.floor(GRID_WIDTH / 2) - Math.ceil(shape[0].length / 2);
+            const y = 0;
+            return isTetrominoAtValidPosition(shape, x, y) ? { shape, color, x, y } : null;
+        }
+        function drawGridSquare(x, y, color) {
+            ctx.fillStyle = color;
+            ctx.fillRect(x * gridSize, y * gridSize, gridSize, gridSize);
+            ctx.strokeStyle = '#374151';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(x * gridSize + 0.5, y * gridSize + 0.5, gridSize - 1, gridSize - 1);
+        }
+        function drawGameGrid() {
+            gameGrid.forEach((row, rowIndex) => {
+                row.forEach((cell, cellIndex) => {
+                    if (cell) { drawGridSquare(cellIndex, rowIndex, cell); }
+                    else {
+                        ctx.fillStyle = '#1f2937';
+                        ctx.fillRect(cellIndex * gridSize, rowIndex * gridSize, gridSize, gridSize);
+                    }
+                });
+            });
+        }
+        function drawTetromino() {
+            if (!currentTetromino) return;
+            const { shape, color, x, y } = currentTetromino;
+            shape.forEach((row, rowIndex) => {
+                row.forEach((cell, cellIndex) => {
+                    if (cell) { drawGridSquare(x + cellIndex, y + rowIndex, color); }
+                });
+            });
+        }
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawGameGrid();
+            drawTetromino();
+        }
+
+        // --- Game Logic Functions ---
+        function isTetrominoAtValidPosition(shape, newX, newY) {
+            for (let row = 0; row < shape.length; row++) {
+                for (let col = 0; col < shape[row].length; col++) {
+                    if (shape[row][col]) {
+                        const x = newX + col;
+                        const y = newY + row;
+                        if (x < 0 || x >= GRID_WIDTH || y >= GRID_HEIGHT || (y >= 0 && gameGrid[y]?.[x])) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+        function moveTetrominoDown() {
+            if (isPaused || isGameOver || !currentTetromino) return false;
+            if (isTetrominoAtValidPosition(currentTetromino.shape, currentTetromino.x, currentTetromino.y + 1)) {
+                currentTetromino.y++;
+                return true;
+            } else {
+                lockTetromino();
+                clearLines();
+                currentTetromino = spawnTetromino();
+                if (!currentTetromino) { gameOver(); }
+                else { dropInterval = gameSpeed; isFastDropping = false; }
+                return false;
+            }
+        }
+        function moveTetrominoLeft() {
+            if (isPaused || isGameOver || !currentTetromino) return;
+            if (isTetrominoAtValidPosition(currentTetromino.shape, currentTetromino.x - 1, currentTetromino.y)) { currentTetromino.x--; }
+        }
+        function moveTetrominoRight() {
+            if (isPaused || isGameOver || !currentTetromino) return;
+            if (isTetrominoAtValidPosition(currentTetromino.shape, currentTetromino.x + 1, currentTetromino.y)) { currentTetromino.x++; }
+        }
+
+        /**
+         * Rotates the tetromino if possible, attempting basic wall kicks.
+         * @param {string} direction - 'clockwise' or 'counterClockwise'.
+         */
+        function rotateTetromino(direction = 'clockwise') {
+            if (isPaused || isGameOver || !currentTetromino) return;
+
+            const rotatedShape = (direction === 'clockwise')
+                ? rotateShapeClockwise(currentTetromino.shape)
+                : rotateShapeCounterClockwise(currentTetromino.shape);
+
+            let potentialX = currentTetromino.x;
+            // Try original position first
+            if (isTetrominoAtValidPosition(rotatedShape, potentialX, currentTetromino.y)) {
+                 currentTetromino.shape = rotatedShape;
+                 currentTetromino.x = potentialX;
+                 return; // Rotation successful
+            }
+            // Basic Wall Kick: Try moving right then left
+            if (isTetrominoAtValidPosition(rotatedShape, potentialX + 1, currentTetromino.y)) {
+                 potentialX++;
+            } else if (isTetrominoAtValidPosition(rotatedShape, potentialX - 1, currentTetromino.y)) {
+                 potentialX--;
+            }
+             // Try moving right twice / left twice (for I piece mainly)
+            else if (isTetrominoAtValidPosition(rotatedShape, potentialX + 2, currentTetromino.y)) {
+                 potentialX += 2;
+            } else if (isTetrominoAtValidPosition(rotatedShape, potentialX - 2, currentTetromino.y)) {
+                 potentialX -= 2;
+            }
+
+            // Apply rotation if a valid position was found after kicking
+            if (isTetrominoAtValidPosition(rotatedShape, potentialX, currentTetromino.y)) {
+                currentTetromino.shape = rotatedShape;
+                currentTetromino.x = potentialX;
+            }
+        }
+
+        /** Rotates a shape matrix 90 degrees clockwise. */
+        function rotateShapeClockwise(shape) {
+            const rows = shape.length;
+            const cols = shape[0].length;
+            const rotated = Array.from({ length: cols }, () => Array(rows).fill(0));
+            for (let y = 0; y < rows; y++) {
+                for (let x = 0; x < cols; x++) {
+                    rotated[x][rows - 1 - y] = shape[y][x];
+                }
+            }
+            return rotated;
+        }
+
+        /** Rotates a shape matrix 90 degrees counter-clockwise. */
+        function rotateShapeCounterClockwise(shape) {
+            const rows = shape.length;
+            const cols = shape[0].length;
+            const rotated = Array.from({ length: cols }, () => Array(rows).fill(0));
+            for (let y = 0; y < rows; y++) {
+                for (let x = 0; x < cols; x++) {
+                     rotated[cols - 1 - x][y] = shape[y][x];
+                }
+            }
+            return rotated;
+        }
+
+
+        function lockTetromino() {
+            if (!currentTetromino) return;
+            playSound('pieceLanded');
+            currentTetromino.shape.forEach((row, rowIndex) => {
+                row.forEach((cell, cellIndex) => {
+                    if (cell) {
+                        const gridY = currentTetromino.y + rowIndex;
+                        const gridX = currentTetromino.x + cellIndex;
+                        if (gridY >= 0 && gridY < GRID_HEIGHT && gridX >= 0 && gridX < GRID_WIDTH) {
+                             gameGrid[gridY][gridX] = currentTetromino.color;
+                        }
+                    }
+                });
+            });
+        }
+        function clearLines() {
+            let linesCleared = 0;
+            for (let y = GRID_HEIGHT - 1; y >= 0; ) {
+                if (gameGrid[y].every(cell => cell)) {
+                    linesCleared++;
+                    gameGrid.splice(y, 1);
+                    gameGrid.unshift(Array(GRID_WIDTH).fill(0));
+                } else { y--; }
+            }
+            if (linesCleared > 0) {
+                updateScore(linesCleared);
+                playSound('clearLine');
+                const levelThreshold = level * 500;
+                if (score >= levelThreshold) {
+                    level++;
+                    let baseSpeed;
+                     switch(difficulty){
+                       case 'easy': baseSpeed = 1000; break;
+                       case 'medium': baseSpeed = 750; break;
+                       case 'hard': baseSpeed = 500; break;
+                       default: baseSpeed = 750;
+                    }
+                    gameSpeed = Math.max(100, baseSpeed - (level -1) * 50);
+                    dropInterval = gameSpeed;
+                    scoreLevelDisplay.textContent = `Score: ${score} | Level: ${level}`;
+                    playSound('levelUp');
+                }
+            }
+        }
+        function updateScore(linesCleared) {
+            const points = [0, 100, 300, 500, 800];
+            score += (points[linesCleared] || 0) * level;
+            scoreLevelDisplay.textContent = `Score: ${score} | Level: ${level}`;
+        }
+        function showMessage(message) {
+            messageBox.textContent = message;
+            messageBox.classList.add('show-message');
+            setTimeout(() => { messageBox.classList.remove('show-message'); }, 3000);
+        }
+        function gameOver() {
+            console.log("Game Over!");
+            isGameOver = true; isPaused = true;
+            cancelAnimationFrame(animationFrameId); animationFrameId = null;
+            menuTitle.textContent = "Game Over!";
+            showMenu(gameOverMenu);
+            playSound('gameOver');
+            pauseResumeButton.disabled = true;
+        }
+
+        // --- Game State Control ---
+        function startGame() {
+            if (Tone.context.state !== 'running') { Tone.start().then(initializeSounds); }
+            else { initializeSounds(); }
+            gameGrid = createEmptyGrid(); score = 0; level = 1;
+             switch(difficulty){
+               case 'easy': gameSpeed = 1000; break;
+               case 'medium': gameSpeed = 750; break;
+               case 'hard': gameSpeed = 500; break;
+               default: gameSpeed = 750;
+            }
+            dropInterval = gameSpeed; dropTimer = 0;
+            isFastDropping = false; isGameOver = false; isPaused = false;
+            scoreLevelDisplay.textContent = `Score: ${score} | Level: ${level}`;
+            currentTetromino = spawnTetromino();
+            if (!currentTetromino) { gameOver(); return; }
+            hideMenu();
+            pauseResumeButton.textContent = 'Pause';
+            pauseResumeButton.disabled = false;
+            lastTime = performance.now();
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+        function pauseGame() {
+            if (isGameOver || isPaused) return;
+            isPaused = true;
+            cancelAnimationFrame(animationFrameId); animationFrameId = null;
+            pauseResumeButton.textContent = 'Resume';
+            showMenu(pauseMenu);
+        }
+        function resumeGame() {
+            if (isGameOver || !isPaused) return;
+            isPaused = false;
+            hideMenu();
+            pauseResumeButton.textContent = 'Pause';
+            lastTime = performance.now();
+             if (!animationFrameId) { animationFrameId = requestAnimationFrame(gameLoop); }
+        }
+        function gameLoop(currentTime) {
+            if (isPaused || isGameOver) { return; }
+            const deltaTime = currentTime - lastTime;
+            lastTime = currentTime;
+            dropTimer += deltaTime;
+            const currentDropInterval = isFastDropping ? FAST_DROP_SPEED : dropInterval;
+            if (dropTimer >= currentDropInterval) {
+                moveTetrominoDown();
+                dropTimer = 0;
+            }
+            draw();
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+
+        // --- Menu Handling ---
+        function showMenu(menuToShow) {
+            menuContainer.style.display = 'flex';
+            [mainMenu, settingsMenu, pauseMenu, gameOverMenu, howToPlayMenu].forEach(m => m.style.display = 'none');
+            menuToShow.style.display = 'block';
+             if (menuToShow === pauseMenu || menuToShow === gameOverMenu || menuToShow === settingsMenu || menuToShow === howToPlayMenu || menuToShow === mainMenu && currentTetromino !== null) {
+                if (!isPaused && !isGameOver) {
+                    isPaused = true;
+                    cancelAnimationFrame(animationFrameId); animationFrameId = null;
+                    pauseResumeButton.textContent = "Resume";
+                }
+            }
+        }
+        function hideMenu() { menuContainer.style.display = 'none'; }
+
+        // --- Event Handlers ---
+        function handlePauseResumeClick() {
+          playSound('buttonClick'); if (isGameOver) return;
+          if (isPaused) { resumeGame(); } else { pauseGame(); }
+        }
+        function handleSettingsClick() {
+            playSound('buttonClick'); menuTitle.textContent = "Settings"; showMenu(settingsMenu);
+        }
+        function handleMenuButtonClick() {
+          playSound('buttonClick');
+           if (!isGameOver && !isPaused && currentTetromino) { pauseGame(); menuTitle.textContent = "Paused"; }
+           else if(isGameOver){ menuTitle.textContent = "Game Over!"; showMenu(gameOverMenu); }
+           else { menuTitle.textContent = "Menu"; showMenu(mainMenu); }
+        }
+
+        /** Handles keydown events (Updated for z/x rotation). */
+        function handleKeyDown(event) {
+            if (isPaused || isGameOver) {
+                if (isPaused && !isGameOver && (event.key === 'p' || event.key === 'P')) { resumeGame(); }
+                return;
+            }
+            // Game controls
+            switch (event.key) {
+                case 'ArrowLeft': moveTetrominoLeft(); break;
+                case 'ArrowRight': moveTetrominoRight(); break;
+                case 'ArrowDown':
+                    if (!isFastDropping) { isFastDropping = true; dropTimer = dropInterval; }
+                    break;
+                case 'z': // Clockwise rotation
+                case 'Z':
+                    rotateTetromino('clockwise');
+                    break;
+                case 'x': // Counter-clockwise rotation
+                case 'X':
+                     rotateTetromino('counterClockwise');
+                    break;
+                case 'p':
+                case 'P':
+                    pauseGame();
+                    break;
+            }
+             // Prevent default browser action for game keys
+            if (['ArrowLeft', 'ArrowRight', 'ArrowDown', 'z', 'Z', 'x', 'X'].includes(event.key)) {
+                event.preventDefault();
+            }
+        }
+
+        function handleKeyUp(event) {
+            if (event.key === 'ArrowDown') { isFastDropping = false; dropTimer = 0; }
+        }
+        function handleMenuItemClick(event) {
+            if (event.target.tagName !== 'LI' || !event.target.dataset.action) { return; }
+            playSound('buttonClick');
+            const action = event.target.dataset.action;
+            switch (action) {
+                case 'startGame': startGame(); break;
+                case 'resume': resumeGame(); break;
+                case 'restart': startGame(); break;
+                case 'settings': menuTitle.textContent = "Settings"; showMenu(settingsMenu); break;
+                case 'howToPlay': menuTitle.textContent = "How to Play"; showMenu(howToPlayMenu); break;
+                case 'mainMenu':
+                    menuTitle.textContent = "Menu"; showMenu(mainMenu);
+                    if (isGameOver) { pauseResumeButton.disabled = true; }
+                    else if (currentTetromino === null) { pauseResumeButton.disabled = true; }
+                    else { pauseResumeButton.disabled = false; pauseResumeButton.textContent = "Resume"; }
+                    break;
+                case 'backToMainMenu': menuTitle.textContent = "Menu"; showMenu(mainMenu); break;
+                case 'difficulty':
+                    const difficulties = ['easy', 'medium', 'hard'];
+                    const currentDifficultyIndex = difficulties.indexOf(difficulty);
+                    difficulty = difficulties[(currentDifficultyIndex + 1) % difficulties.length];
+                    event.target.querySelector('span').textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+                    showMessage(`Difficulty set to ${difficulty}. Takes effect on restart.`);
+                    break;
+                 case 'sound':
+                    soundEnabled = !soundEnabled;
+                    event.target.querySelector('span').textContent = soundEnabled ? 'On' : 'Off';
+                    if (soundEnabled) playSound('buttonClick');
+                    break;
+            }
+        }
+        function resizeCanvas() {
+            const containerWidth = canvas.clientWidth;
+            gridSize = Math.floor(containerWidth / GRID_WIDTH);
+            canvas.width = GRID_WIDTH * gridSize;
+            canvas.height = GRID_HEIGHT * gridSize;
+            if (!isPaused || currentTetromino) { draw(); }
+            else { ctx.clearRect(0, 0, canvas.width, canvas.height); drawGameGrid(); }
+        }
+
+        // --- Initialization ---
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        pauseResumeButton.disabled = true;
+        pauseResumeButton.addEventListener('click', handlePauseResumeClick);
+        settingsButton.addEventListener('click', handleSettingsClick);
+        menuButton.addEventListener('click', handleMenuButtonClick);
+        menuContainer.addEventListener('click', handleMenuItemClick);
+        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('keyup', handleKeyUp);
+        menuTitle.textContent = "Menu";
+        showMenu(mainMenu);
+
+    </script>
+</body>
+</html>
