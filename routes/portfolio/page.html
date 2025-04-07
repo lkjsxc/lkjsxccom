@@ -1,280 +1,203 @@
-<!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>lkjsxc - Portfolio</title>
-    <style>
-        body {
-            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
-            line-height: 1.7;
-            margin: 20px;
-            background-color: #f8f9fa;
-            color: #343a40;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        header, section {
-            background-color: #ffffff;
-            padding: 25px;
-            margin-bottom: 25px;
-            border-radius: 8px;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.08);
-        }
-        h1, h2, h3 {
-            color: #0056b3;
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 15px;
-            font-size: 2.2em;
-        }
-        header p.subtitle {
-            text-align: center;
-            color: #6c757d;
-            font-size: 1.1em;
-            margin-top: 0;
-            margin-bottom: 25px;
-        }
-        h2 {
-            border-bottom: 2px solid #0056b3;
-            padding-bottom: 8px;
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-size: 1.6em;
-        }
-        h3 {
-            color: #17a2b8;
-            margin-top: 0;
-            margin-bottom: 10px;
-            font-size: 1.3em;
-        }
-        ul {
-            list-style: disc;
-            margin-left: 20px;
-            padding-left: 0;
-        }
-        li {
-            margin-bottom: 12px;
-        }
-        a {
-            color: #007bff;
-            text-decoration: none;
-            transition: color 0.2s ease-in-out;
-        }
-        a:hover {
-            color: #0056b3;
-            text-decoration: underline;
-        }
-        .project-item {
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #dee2e6;
-        }
-        .project-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-        .project-item strong {
-            color: #495057;
-        }
-        .skills-list {
-            padding-left: 0;
-            list-style: none;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .skills-list li {
-            background-color: #e9ecef;
-            padding: 6px 12px;
-            border-radius: 15px;
-            font-size: 0.95em;
-            color: #495057;
-            margin-bottom: 0;
-        }
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            color: #6c757d;
-            font-size: 0.9em;
-        }
-        @media (max-width: 600px) {
-            body {
-                margin: 10px;
-            }
-            header, section {
-                padding: 20px;
-            }
-            h1 {
-                font-size: 1.8em;
-            }
-            h2 {
-                font-size: 1.4em;
-            }
-            h3 {
-                font-size: 1.2em;
-            }
-            .skills-list {
-                gap: 8px;
-            }
-            .skills-list li {
-                padding: 5px 10px;
-                font-size: 0.9em;
-            }
-        }
-    </style>
+    <title>lkjsxc - Portfolio (No CSS/JS)</title>
+
 </head>
+
 <body>
 
-<div class="container">
+    <div>
 
-    <header>
-        <h1>lkjsxc / スク</h1>
-        <p class="subtitle">Portfolio ~お手製HTTPサーバ~</p>
-        <p>ZEN大学に在籍し、ソフトウェア開発を中心に幅広い技術分野を探求する学生です。特に低レイヤー技術、言語処理系、Web技術に強い関心を持ち、スキルを習得してきました。新しい技術への好奇心が強く、思い立ったらすぐに行動に移すことを信条としています。</p>
-    </header>
+        <header>
+            <h1>lkjsxc / スク</h1>
+            <p>Portfolio ~お手製HTTPサーバ~</p>
+            <p>ZEN大学に在籍し、ソフトウェア開発を中心に幅広い技術分野を探求する学生です。特に低レイヤー技術、言語処理系、Web技術に強い関心を持ち、スキルを習得してきました。新しい技術への好奇心が強く、思い立ったらすぐに行動に移すことを信条としています。
+            </p>
+        </header>
 
-    <section id="about">
-        <h2>自己紹介</h2>
-        <p>
-            プログラミングの奥深さに魅了され、日々の学習と開発を通じてスキルアップに励んでいます。特に、コンピュータがどのように動作するのか、言語がどのように処理されるのかといった根本的な原理への探求心が強く、低レイヤー技術や言語処理系の開発に積極的に取り組んできました。
-        </p>
-        <p>
-            個人での開発に加え、オンラインコミュニティでの交流や友人との共同プロジェクトを通じて、技術的な知見を深めるとともに、コミュニケーションや協調性を培ってきました。常に新しい知識を吸収し、実践的な開発経験を積むことで、将来的に価値あるソフトウェア開発に貢献したいと考えています。
-        </p>
-        <p><strong>興味・関心分野:</strong> 低レイヤー技術 (UEFI, OS)、Web開発 (フロントエンド, バックエンド)、プログラミング言語理論・実装、機械学習 (CUDA C++)、サーバー構築・運用</p>
-        <p><strong>保有資格:</strong> 基本情報技術者試験 合格、高等学校卒業程度認定試験 合格</p>
-    </section>
+        <hr>
 
-    <section id="skills">
-        <h2>スキルセット</h2>
-        <ul class="skills-list">
-            <li>C</li>
-            <li>Rust</li>
-            <li>Python</li>
-            <li>JavaScript</li>
-            <li>TypeScript</li>
-            <li>HTML</li>
-            <li>CSS</li>
-            <li>Svelte</li>
-            <li>Node.js</li>
-            <li>Linux (Arch, Ubuntu, NixOS)</li>
-            <li>Windows</li>
-            <li>Docker</li>
-            <li>Git / GitHub</li>
-            <li>Cloudflare</li>
-            <li>Webサーバー (Nginx)</li>
-            <li>サーバー構築・運用</li>
-            <li>ネットワーク基礎 (HTTP, DNS, TCP/IP)</li>
-            <li>Nostrプロトコル</li>
-            <li>UEFI開発基礎</li>
-            <li>言語処理系開発基礎</li>
-        </ul>
-    </section>
+        <section id="about">
+            <h2>自己紹介</h2>
+            <hr>
+            <p>
+                プログラミングの奥深さに魅了され、日々の学習と開発を通じてスキルアップに励んでいます。特に、コンピュータがどのように動作するのか、言語がどのように処理されるのかといった根本的な原理への探求心が強く、低レイヤー技術や言語処理系の開発に積極的に取り組んできました。
+            </p>
+            <p>
+                個人での開発に加え、オンラインコミュニティでの交流や友人との共同プロジェクトを通じて、技術的な知見を深めるとともに、コミュニケーションや協調性を培ってきました。常に新しい知識を吸収し、実践的な開発経験を積むことで、将来的に価値あるソフトウェア開発に貢献したいと考えています。
+            </p>
+            <p><strong>興味・関心分野:</strong> 低レイヤー技術 (UEFI, OS)、Web開発 (フロントエンド, バックエンド)、プログラミング言語理論・実装、機械学習 (CUDA
+                C++)、サーバー構築・運用</p>
+            <p><strong>保有資格:</strong> 基本情報技術者試験 合格、高等学校卒業程度認定試験 合格</p>
+        </section>
 
-    <section id="projects">
-        <h2>プロジェクト・開発実績</h2>
+        <hr>
 
-        <div class="project-item">
-            <h3>自作プログラミング言語 開発</h3>
-            <p><strong>時期:</strong> 2024年9月下旬〜継続中</p>
-            <p><strong>概要:</strong> プログラミング言語の仕組みを深く理解するため、C言語を用いて独自のスタックベース・スクリプト言語を設計・開発しました。パーサ、バイトコードVM、基本的な制御構文（if, loop）、関数定義、ラベルジャンプ、プリプロセッサ機能などを実装しました。</p>
-            <p><strong>取り組み:</strong> 構文設計からVM実装まで一貫して開発。デバッグや機能拡張を繰り返し実施。Scratch上でのVM実装やCanvas API連携も試行。開発過程や技術的なポイントをQiita記事で解説し、フィードバックを反映。</p>
-            <p><strong>使用技術:</strong> C言語, (実験的にScratch)</p>
-            <p><strong>成果・学び:</strong> プログラミング言語の設計・実装プロセス、構文解析、VMの動作原理、メモリ管理の重要性について実践的な知識を習得。技術記事執筆による知識の整理と発信力向上。</p>
-        </div>
-
-        <div class="project-item">
-            <h3>UEFIアプリケーション開発 (学習目的)</h3>
-            <p><strong>時期:</strong> 2024年4月頃</p>
-            <p><strong>概要:</strong> 低レイヤー技術への理解を深める目的で、C言語を用いたUEFIアプリケーション開発に取り組みました。基本的なファイル操作 (ls, putc)、ファイルシステム機能、データ構造 (ハッシュテーブル) などを実装しました。</p>
-            <p><strong>取り組み:</strong> 限られたドキュメントや資料を元に必要な情報を収集・選択し、ゼロから機能を実装。EDK IIなどの開発環境を利用。</p>
-            <p><strong>使用技術:</strong> C言語, UEFI (EDK II)</p>
-            <p><strong>成果・学び:</strong> コンピュータのブートプロセスやハードウェアに近い層でのプログラミングに関する基礎知識を獲得。低レイヤーデバッグの難しさと問題解決能力の向上。</p>
-        </div>
-
-        <div class="project-item">
-            <h3>テキストエディタ開発 (複数回挑戦)</h3>
-            <p><strong>時期:</strong> 2024年3月下旬〜継続的に改善</p>
-            <p><strong>概要:</strong> 実用的なツール開発を通じてプログラミングスキルを向上させるため、C言語およびRustを用いてテキストエディタの開発に複数回挑戦しました。基本的な編集機能から始め、スクリプト言語の埋め込みなど、段階的な機能拡張を試みました。</p>
-            <p><strong>取り組み:</strong> データ構造の検討（Gap Buffer, Rope等）、画面描画処理、入力ハンドリングを実装。C言語とRustでの実装比較を通じて、各言語の特性やメモリ管理の違いを学習。開発成果の一部をQiita記事として公開し、改善。</p>
-            <p><strong>使用技術:</strong> C言語, Rust</p>
-            <p><strong>成果・学び:</strong> 状態管理、UI設計、データ構造選択の重要性に関する理解。異なるプログラミング言語での実装経験。技術記事を通じたフィードバック活用の経験。</p>
-        </div>
-
-         <div class="project-item">
-            <h3>Brainfuck処理系 (インタプリタ・コンパイラ) 開発</h3>
-            <p><strong>時期:</strong> 2024年7月頃, 9月頃</p>
-            <p><strong>概要:</strong> 言語処理系の基礎を学ぶため、Brainfuck言語のインタプリタおよびC言語へのトランスパイラを開発しました。インタプリタ実装では最適化を行い、実行速度を約10倍向上させました。</p>
-            <p><strong>取り組み:</strong> インタプリタの基本実装後、命令の最適化（連続する`+`/`-`や`>`/`<`の結合など）を実装。トランスパイラでは、Brainfuckコードを等価なC言語コードに変換するロジックを実装。開発内容をNote記事で解説。</p>
-            <p><strong>使用技術:</strong> C言語</p>
-            <p><strong>成果・学び:</strong> インタプリタとコンパイラ（トランスパイラ）の基本的な仕組み、コード最適化の考え方と効果を実践的に習得。言語処理技術への関心を深めた。</p>
-        </div>
-
-        <div class="project-item">
-            <h3>Webサイト (ポートフォリオ/ブログ) 構築・運用</h3>
-            <p><strong>時期:</strong> 2024年12月頃〜</p>
-            <p><strong>概要:</strong> 自身の活動記録と情報発信の場として、Webサイトを構築・運用しています。当初Svelteで開発し、その後、学習目的でC言語によるシンプルなHTTPサーバー実装にも挑戦しました。</p>
-            <p><strong>取り組み:</strong> Svelteを用いたフロントエンド開発。Cloudflare Pages/Workersでのデプロイ、独自ドメイン設定、HTTPS化、DNS管理。学習としてC言語での基本的なHTTP/1.0サーバーを実装。</p>
-            <p><strong>使用技術:</strong> Svelte, HTML, CSS, JavaScript, C言語 (HTTPサーバー学習用), Cloudflare, Git/GitHub</p>
-            <p><strong>成果・学び:</strong> フロントエンドフレームワーク (Svelte) の利用経験。Webサーバーの基本的な仕組み、HTTPプロトコルの基礎、DNSやCDNなどのWebインフラに関する知識を習得。</p>
-        </div>
-
-        <div class="project-item">
-            <h3>Nostr (分散型SNSプロトコル) 関連開発</h3>
-            <p><strong>時期:</strong> 2024年8月頃〜</p>
-            <p><strong>概要:</strong> 分散型SNSプロトコルNostrに関心を持ち、関連ツール開発に挑戦しました。Node.jsを用いたbot開発や、Svelteとrx-nostrライブラリを用いたクライアント開発を試みました。</p>
-            <p><strong>取り組み:</strong> Nostrプロトコルの仕様を学習し、WebSocket通信を利用したリアルタイムなイベント処理を実装。外部ライブラリ (rx-nostr) を活用した効率的な開発。自身でNostrリレーサーバーを一時的に運用した経験も含む。</p>
-            <p><strong>使用技術:</strong> JavaScript, Node.js, Svelte, rx-nostr (ライブラリ), WebSocket</p>
-            <p><strong>成果・学び:</strong> 分散型プロトコルの概念理解。WebSocketを用いた非同期通信プログラミングの実践。外部ライブラリの調査・活用能力の向上。</p>
-        </div>
-
-        <div class="project-item">
-            <h3>サーバー構築・運用経験</h3>
-            <p><strong>概要:</strong> 自宅サーバーやVPSを利用し、様々なサービスの構築・運用経験があります。</p>
-            <p><strong>取り組み:</strong></p>
+        <section id="skills">
+            <h2>スキルセット</h2>
+            <hr>
             <ul>
-                <li>Linux (主にArch Linux, Ubuntu) 環境でのサーバー構築。試行錯誤を通じてOSやネットワークに関する知識を深化。</li>
-                <li>Dockerを用いたコンテナ環境の構築・管理 (Minecraftサーバー, Arkサーバー等)。</li>
-                <li>Nginxを用いたリバースプロキシ設定、Webサーバー運用。</li>
+                <li>C</li>
+                <li>Rust</li>
+                <li>Python</li>
+                <li>JavaScript</li>
+                <li>TypeScript</li>
+                <li>HTML</li>
+                <li>Svelte</li>
+                <li>Node.js</li>
+                <li>Linux (Arch, Ubuntu, NixOS)</li>
+                <li>Docker</li>
+                <li>Git / GitHub</li>
+                <li>Cloudflare</li>
+                <li>Nginx</li>
+                <li>サーバー構築・運用</li>
+                <li>ネットワーク基礎 (HTTP, DNS, TCP/IP)</li>
+                <li>Nostrプロトコル</li>
+                <li>UEFI開発基礎</li>
+                <li>言語処理系開発基礎</li>
             </ul>
-            <p><strong>使用技術:</strong> Linux, Docker, Nginx, SSH, 基本的なネットワーク設定</p>
-            <p><strong>成果・学び:</strong> サーバーインフラの基本的な構築・運用スキル。コンテナ技術の活用経験。トラブルシューティング能力の向上。</p>
-        </div>
+        </section>
 
-    </section>
+        <hr>
 
-    <section id="learning">
-        <h2>学習への取り組み</h2>
-        <p>
-            知的好奇心に基づき、継続的な学習と自己成長を重視しています。以下のような方法で知識やスキルを深めています。
-        </p>
-        <ul>
-            <li><strong>技術探求と実践:</strong> 新しい技術や興味を持った分野（OS、x86、言語理論等）について、書籍やドキュメントを読み込み、実際に手を動かして試すことを大切にしています。GitHubリポジトリで読書メモや学習記録を管理しています。</li>
-            <li><strong>体系的な学習:</strong> オンライン学習プラットフォーム (Progate Path等) や資格取得 (基本情報技術者試験) を通じて、基礎知識を体系的に学んでいます。</li>
-            <li><strong>情報収集とコミュニティ参加:</strong> RSSリーダー、技術系メディア、オンラインコミュニティ (Nostr等) を活用し、最新の技術動向や多様な視点に触れるよう努めています。</li>
-            <li><strong>自己分析と改善:</strong> 日々の活動や学習内容を記録・振り返り、学習効率の改善や目標設定に繋げています。</li>
-            <li><strong>アルゴリズム学習:</strong> 問題解決能力向上のため、AtCoderなどの競技プログラミングに挑戦し、アルゴリズムとデータ構造の学習を進めています。</li>
-            <li><strong>機械学習への挑戦:</strong> CUDA C++やC言語でのニューラルネットワーク実装、強化学習ライブラリの利用などを通じて、機械学習分野の基礎的な概念を学んでいます。</li>
-        </ul>
-    </section>
+        <section id="projects">
+            <h2>プロジェクト・開発実績</h2>
+            <hr>
 
-    <section id="links">
-        <h2>関連リンク</h2>
-        <ul>
-            <li><a href="https://github.com/lkjsxc" target="_blank" rel="noopener noreferrer">GitHub (lkjsxc)</a> - 開発リポジトリや学習記録（前のアカウントは実質的に凍結しました）</li>
-        </ul>
-    </section>
+            <div>
+                <h3>自作プログラミング言語 開発</h3>
+                <p><strong>時期:</strong> 2024年9月下旬〜継続中</p>
+                <p><strong>概要:</strong>
+                    プログラミング言語の仕組みを深く理解するため、C言語を用いて独自のスタックベース・スクリプト言語を設計・開発しました。パーサ、バイトコードVM、基本的な制御構文（if,
+                    loop）、関数定義、ラベルジャンプ、プリプロセッサ機能などを実装しました。</p>
+                <p><strong>取り組み:</strong> 構文設計からVM実装まで一貫して開発。デバッグや機能拡張を繰り返し実施。Scratch上でのVM実装やCanvas
+                    API連携も試行。開発過程や技術的なポイントをQiita記事で解説し、フィードバックを反映。</p>
+                <p><strong>使用技術:</strong> C言語, (実験的にScratch)</p>
+                <p><strong>成果・学び:</strong> プログラミング言語の設計・実装プロセス、構文解析、VMの動作原理、メモリ管理の重要性について実践的な知識を習得。技術記事執筆による知識の整理と発信力向上。
+                </p>
+            </div>
+            <hr>
 
-    <footer>
-        <p>© 2025 lkjsxc</p>
-    </footer>
+            <div>
+                <h3>UEFIアプリケーション開発 (学習目的)</h3>
+                <p><strong>時期:</strong> 2024年4月頃</p>
+                <p><strong>概要:</strong> 低レイヤー技術への理解を深める目的で、C言語を用いたUEFIアプリケーション開発に取り組みました。基本的なファイル操作 (ls,
+                    putc)、ファイルシステム機能、データ構造 (ハッシュテーブル) などを実装しました。</p>
+                <p><strong>取り組み:</strong> 限られたドキュメントや資料を元に必要な情報を収集・選択し、ゼロから機能を実装。EDK IIなどの開発環境を利用。</p>
+                <p><strong>使用技術:</strong> C言語, UEFI (EDK II)</p>
+                <p><strong>成果・学び:</strong> コンピュータのブートプロセスやハードウェアに近い層でのプログラミングに関する基礎知識を獲得。低レイヤーデバッグの難しさと問題解決能力の向上。</p>
+            </div>
+            <hr>
 
-</div>
+            <div>
+                <h3>テキストエディタ開発 (複数回挑戦)</h3>
+                <p><strong>時期:</strong> 2024年3月下旬〜継続的に改善</p>
+                <p><strong>概要:</strong>
+                    実用的なツール開発を通じてプログラミングスキルを向上させるため、C言語およびRustを用いてテキストエディタの開発に複数回挑戦しました。基本的な編集機能から始め、スクリプト言語の埋め込みなど、段階的な機能拡張を試みました。
+                </p>
+                <p><strong>取り組み:</strong> データ構造の検討（Gap Buffer,
+                    Rope等）、画面描画処理、入力ハンドリングを実装。C言語とRustでの実装比較を通じて、各言語の特性やメモリ管理の違いを学習。開発成果の一部をQiita記事として公開し、改善。</p>
+                <p><strong>使用技術:</strong> C言語, Rust</p>
+                <p><strong>成果・学び:</strong> 状態管理、UI設計、データ構造選択の重要性に関する理解。異なるプログラミング言語での実装経験。技術記事を通じたフィードバック活用の経験。</p>
+            </div>
+            <hr>
+
+            <div>
+                <h3>Brainfuck処理系 (インタプリタ・コンパイラ) 開発</h3>
+                <p><strong>時期:</strong> 2024年7月頃, 9月頃</p>
+                <p><strong>概要:</strong>
+                    言語処理系の基礎を学ぶため、Brainfuck言語のインタプリタおよびC言語へのトランスパイラを開発しました。インタプリタ実装では最適化を行い、実行速度を約10倍向上させました。</p>
+                <p><strong>取り組み:</strong> インタプリタの基本実装後、命令の最適化（連続する`+`/`-`や`>`/`<`の結合など）を実装。トランスパイラでは、Brainfuckコードを等価なC言語コードに変換するロジックを実装。開発内容をNote記事で解説。< /p>
+                        <p><strong>使用技術:</strong> C言語</p>
+                        <p><strong>成果・学び:</strong> インタプリタとコンパイラ（トランスパイラ）の基本的な仕組み、コード最適化の考え方と効果を実践的に習得。言語処理技術への関心を深めた。
+                        </p>
+            </div>
+            <hr>
+
+            <div>
+                <h3>Webサイト (ポートフォリオ/ブログ) 構築・運用</h3>
+                <p><strong>時期:</strong> 2024年12月頃〜</p>
+                <p><strong>概要:</strong>
+                    自身の活動記録と情報発信の場として、Webサイトを構築・運用しています。当初Svelteで開発し、その後、学習目的でC言語によるシンプルなHTTPサーバー実装にも挑戦しました。</p>
+                <p><strong>取り組み:</strong> Svelteを用いたフロントエンド開発。Cloudflare
+                    Pages/Workersでのデプロイ、独自ドメイン設定、HTTPS化、DNS管理。学習としてC言語での基本的なHTTP/1.0サーバーを実装。</p>
+                <p><strong>使用技術:</strong> Svelte, HTML, CSS, JavaScript, C言語 (HTTPサーバー学習用), Cloudflare, Git/GitHub</p>
+                <p><strong>成果・学び:</strong> フロントエンドフレームワーク (Svelte)
+                    の利用経験。Webサーバーの基本的な仕組み、HTTPプロトコルの基礎、DNSやCDNなどのWebインフラに関する知識を習得。</p>
+            </div>
+            <hr>
+
+            <div>
+                <h3>Nostr (分散型SNSプロトコル) 関連開発</h3>
+                <p><strong>時期:</strong> 2024年8月頃〜</p>
+                <p><strong>概要:</strong>
+                    分散型SNSプロトコルNostrに関心を持ち、関連ツール開発に挑戦しました。Node.jsを用いたbot開発や、Svelteとrx-nostrライブラリを用いたクライアント開発を試みました。</p>
+                <p><strong>取り組み:</strong> Nostrプロトコルの仕様を学習し、WebSocket通信を利用したリアルタイムなイベント処理を実装。外部ライブラリ (rx-nostr)
+                    を活用した効率的な開発。自身でNostrリレーサーバーを一時的に運用した経験も含む。</p>
+                <p><strong>使用技術:</strong> JavaScript, Node.js, Svelte, rx-nostr (ライブラリ), WebSocket</p>
+                <p><strong>成果・学び:</strong> 分散型プロトコルの概念理解。WebSocketを用いた非同期通信プログラミングの実践。外部ライブラリの調査・活用能力の向上。</p>
+            </div>
+            <hr>
+
+            <div>
+                <h3>サーバー構築・運用経験</h3>
+                <p><strong>概要:</strong> 自宅サーバーやVPSを利用し、様々なサービスの構築・運用経験があります。</p>
+                <p><strong>取り組み:</strong></p>
+                <ul>
+                    <li>Linux (主にArch Linux, Ubuntu) 環境でのサーバー構築。試行錯誤を通じてOSやネットワークに関する知識を深化。</li>
+                    <li>Dockerを用いたコンテナ環境の構築・管理 (Minecraftサーバー, Arkサーバー等)。</li>
+                    <li>Nginxを用いたリバースプロキシ設定、Webサーバー運用。</li>
+                </ul>
+                <p><strong>使用技術:</strong> Linux, Docker, Nginx, SSH, 基本的なネットワーク設定</p>
+                <p><strong>成果・学び:</strong> サーバーインフラの基本的な構築・運用スキル。コンテナ技術の活用経験。トラブルシューティング能力の向上。</p>
+            </div>
+
+        </section>
+
+        <hr>
+
+        <section id="learning">
+            <h2>学習への取り組み</h2>
+            <hr>
+            <p>
+                知的好奇心に基づき、継続的な学習と自己成長を重視しています。以下のような方法で知識やスキルを深めています。
+            </p>
+            <ul>
+                <li><strong>技術探求と実践:</strong>
+                    新しい技術や興味を持った分野（OS、x86、言語理論等）について、書籍やドキュメントを読み込み、実際に手を動かして試すことを大切にしています。GitHubリポジトリで読書メモや学習記録を管理しています。
+                </li>
+                <li><strong>体系的な学習:</strong> オンライン学習プラットフォーム (Progate Path等) や資格取得 (基本情報技術者試験) を通じて、基礎知識を体系的に学んでいます。
+                </li>
+                <li><strong>情報収集とコミュニティ参加:</strong> RSSリーダー、技術系メディア、オンラインコミュニティ (Nostr等) を活用し、最新の技術動向や多様な視点に触れるよう努めています。
+                </li>
+                <li><strong>自己分析と改善:</strong> 日々の活動や学習内容を記録・振り返り、学習効率の改善や目標設定に繋げています。</li>
+                <li><strong>アルゴリズム学習:</strong> 問題解決能力向上のため、AtCoderなどの競技プログラミングに挑戦し、アルゴリズムとデータ構造の学習を進めています。</li>
+                <li><strong>機械学習への挑戦:</strong> CUDA C++やC言語でのニューラルネットワーク実装、強化学習ライブラリの利用などを通じて、機械学習分野の基礎的な概念を学んでいます。</li>
+            </ul>
+        </section>
+
+        <hr>
+
+        <section id="links">
+            <h2>関連リンク</h2>
+            <hr>
+            <ul>
+                <li><a href="https://github.com/lkjsxc" target="_blank" rel="noopener noreferrer">GitHub (lkjsxc)</a> -
+                    開発リポジトリや学習記録（前のアカウントは実質的に凍結しました）</li>
+            </ul>
+        </section>
+
+        <hr>
+
+        <footer>
+            <p>© 2025 lkjsxc</p>
+        </footer>
+
+    </div>
 
 </body>
+
 </html>
